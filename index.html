@@ -159,7 +159,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
   .nav button{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;font-size:10px;padding:8px 4px;border-radius:8px}
   .nav button.on{background:transparent;color:var(--teal)}
   .nav .ico{font-size:21px}
-  .main{padding:24px 18px calc(110px + env(safe-area-inset-bottom));height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  .main{padding:calc(20px + env(safe-area-inset-top)) 18px calc(110px + env(safe-area-inset-bottom));height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
   .topgrid{grid-template-columns:1fr}
   .chgrid{grid-template-columns:1fr}
   .viewhead{font-size:22px}
