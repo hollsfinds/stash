@@ -195,6 +195,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 /* ---------- MESSAGE BANKS (ported verbatim) ---------- */
 const MILESTONE = {
 0:["Day one energy, {name}. The hardest part is starting and you just did it!","Zero to something, {name}. Every dollar in here is a tiny flex!","We are off, {name}. {goal} is not gonna fund itself, but look at you starting.","First deposits hit different, {name}. Keep that momentum, babe!","The jar is open, {name}. Now we feed it, let us go!"],
+"low":["You're on the board, {name}. Small but mighty, keep stacking!","A little in the jar, {name}. It's a start, and a start counts!","Off zero and climbing, {name}. {left} to go, let's keep it rolling!","First dollars in, {name}. The snowball's tiny but it's rolling!","Not much yet, {name}, but it's something. Keep feeding the jar!"],
 10:["10% in, {name}. Small but mighty, keep stacking!","Look at you, {name}, already 10% toward {goal}, cute start!","10% down, {name}. {left} to go, but momentum is momentum.","Double digits, {name}. The snowball is officially rolling!","10%, {name}. Not nothing babe, keep feeding the damn jar!"],
 20:["20%, {name}. You are actually doing the thing, proud of you!","One fifth of the way, {name}. {goal} is getting nervous!","20% saved and still going? Iconic, {name}.","20%, {name}. {left} left, but you have the rhythm now!","A solid 20%, {name}. The habit is sticking, hell yeah!"],
 30:["30%, {name}. Officially past just started, keep rolling!","Almost a third of the way to {goal}, {name}. Look at you!","30% in the bag, {name}. The momentum is real.","30%, {name}. {left} to go, but you are making this look easy!","30%, {name}. Future you is already saying thank you!"],
@@ -216,7 +217,7 @@ const PERSONA = {
 "The Slow & Steady Saver":["You are the Slow and Steady type, {name}. Consistency wins!","Steady as they come, {name}. Same energy every time, respect!","The tortoise, {name}, and the tortoise wins. Keep it up.","Reliable deposits, {name}. Boring? Maybe. Effective? Hell yes!","You show up, {name}. Every time, that is the whole damn secret!"],
 "The Sprinter":["You are a Sprinter, {name}. Big bursts, big results!","Go big or go home, huh {name}? Love the firepower!","Few moves, mighty ones, {name}. The Sprinter strikes.","You do not nibble, {name}, you pounce, Sprinter energy!","Big-swing saver, {name}. When you commit, you damn well COMMIT!"],
 "The Sporadic Saver":["You are a bit Sporadic, {name}, whenever the mood strikes, huh?","Random but real, {name}. A little here, a little there, it adds up!","The Sporadic Saver, {name}. Chaotic good, we will take it.","No pattern, no problem, {name}. You still show up, mostly!","Free spirit saver, {fullname}. Maybe set a reminder, just saying!"],
-"Just getting started":["Fresh start, {name}. Log a deposit and I will size you up!","Too early to call it, {name}. Feed the jar and we will talk!","Blank slate, {name}. Let us see what kind of saver you are.","No data yet, {name}. Add a deposit and watch me judge, lovingly!","Just getting going, {name}. The personality reveal awaits!"]
+"Just getting started":["Still sizing you up, {name}. A few more deposits and I'll call your style!","Too soon to label you, {name}. Keep feeding the jar and we'll see.","Your saving style is still loading, {name}. Give me a little more!","A couple more deposits, {name}, and I'll tell you what kind of saver you are.","Jury's still out on your style, {name}. Keep going!"]
 };
 const COMBINED_TALK=[
 "Money moving on every goal, {name}. That's how it's done!",
@@ -229,6 +230,7 @@ const COMBINED_TALK=[
 /* ---------- SWEET (Gentle) ---------- */
 const SWEET_MILE={
 0:["Day one, {name}. Starting is the bravest part, and you just did it.","Every journey starts with a single deposit, {name}. Welcome to yours.","The jar is open, {name}. You are exactly where you need to be.","First deposit in, {name}. I am so proud of you for beginning.","You started, {name}. That matters more than you know."],
+"low":["You're off the starting line, {name}. Small but real, keep going.","A little in the jar, {name}. Every dollar counts, truly.","You've begun, {name}. {left} to go, one gentle step at a time.","First few dollars saved, {name}. Lovely start, keep it up.","The jar is no longer empty, {name}. Proud of you for starting."],
 10:["10% already, {name}. Little by little adds up to a lot.","You are 10% of the way to {goal}, {name}. Lovely start.","10% saved, {name}. {left} to go, and you are building a beautiful habit.","Double digits, {name}. Gentle, steady progress is still progress.","10% in, {name}. Keep being kind to your future self."],
 20:["20%, {name}. You are finding your rhythm, and it shows.","One fifth of the way to {goal}, {name}. Wonderful.","20% saved, {name}. Every deposit is a small act of self-care.","20%, {name}. {left} left, and you are doing just fine.","A steady 20%, {name}. The habit is taking root."],
 30:["30%, {name}. Look how far a little consistency carries you.","Almost a third of the way to {goal}, {name}. Beautifully done.","30% saved, {name}. You are doing something kind for tomorrow.","30%, {name}. {left} to go, one gentle step at a time.","30% in, {name}. Future you is smiling."],
@@ -250,13 +252,14 @@ const SWEET_PERSONA={
 "The Slow & Steady Saver":["You are Slow and Steady, {name}. Consistency is a quiet superpower.","Steady as can be, {name}. Same gentle effort every time.","The tortoise, {name}, and the tortoise always gets there.","Reliable deposits, {name}. Calm and steady, just lovely.","You show up, {name}. That is the whole secret."],
 "The Sprinter":["You are a Sprinter, {name}. Big, bold steps when you commit.","Go big when it counts, {name}. I admire that.","Few moves, mighty ones, {name}. Lovely energy.","You leap when you are ready, {name}. Beautiful drive.","Big-hearted saver, {name}. When you commit, you really commit."],
 "The Sporadic Saver":["You are a Sporadic saver, {name}. Whenever you can is perfectly fine.","A little here and there, {name}. It still adds up, beautifully.","The Sporadic Saver, {name}. Gentle and no pressure, you show up.","No set pattern, {name}, and that is okay. You are doing great.","Free spirit, {name}. Maybe a soft reminder could help, only if you like."],
-"Just getting started":["Fresh start, {name}. Add a deposit and we will get to know your style.","Too early to tell, {name}. Feed the jar and we will see.","Blank slate, {name}. Let us discover your saving style together.","No data yet, {name}. Add a deposit whenever you are ready.","Just beginning, {name}. The best part is ahead."]
+"Just getting started":["Still getting to know your style, {name}. Keep going and I'll call it.","A few more deposits, {name}, and I'll see your saving rhythm.","Early days, {name}. Your saving personality is still taking shape.","Give it a little time, {name}, and I'll tell you what kind of saver you are.","We're still getting to know each other, {name}. Keep stacking."]
 };
 const SWEET_COMBINED=["Every goal is growing, {name}. Steady and lovely.","All your goals moving at once, {name}. Beautifully done.","You are tending each goal with care, {name}. It shows.","Every jar is filling, {name}. Gentle, steady progress.","Your whole lineup is climbing, {name}. So proud of you."];
 
 /* ---------- ROAST (Brutally Honest) ---------- */
 const ROAST_MILE={
 0:["Zero dollars, {name}. You opened a savings app to save absolutely fucking nothing. Bold. Feed the jar.","Day one and the jar's bone empty, {name}. Shocking. Put some damn money in it.","You opened the app, {name}. Groundbreaking. Now do the hard part and actually fucking SAVE something.","Nothing saved yet, {name}, and the jar's judging you. Honestly? Fair as hell.","Bitch, the jar is EMPTY. {goal} doesn't fund its damn self, {fullname}. Go."],
+"low":["Okay, a little something, {name}. Beats the big fat zero. Keep going.","You're on the board, {name}. Barely. {left} to go, so move.","Small start, {name}. The jar's not empty anymore, miracle. More.","A few bucks in, {name}. Cute. Now make it a real damn pile.","Not nothing, {name}, but not much. Quit stalling and stack the cash."],
 10:["10%, {name}? Cute. Wake me when it's real fucking money.","Double digits, {name}. Don't you DARE throw a parade for 10%.","10% toward {goal}, {name}. {left} to go, so quit stalling and stack the damn cash.","Okay, 10%, {name}. A start is not a finish. MORE.","10% in, {name}. The jar's barely awake. Feed the fuckin' thing."],
 20:["20%, {name}. Alright, you're not totally hopeless. Keep going.","One fifth, {name}. {goal}'s not impressed and neither am I. MORE.","20% saved, {name}. Decent. Don't get cocky, broke is one impulse buy away.","20%, {name}. {left} left, so keep your damn wallet SHUT.","Bitch, 20%! Fine, I fucking see you. Now do it again."],
 30:["30%, {name}. Past the embarrassing zone. Barely. Keep moving.","Almost a third, {name}. Stop celebrating and keep fucking SAVING.","30% in, {name}. Not bad. Not done. Hustle.","30%, {name}. {left} to go and no spending sprees, you menace.","30%, {name}. The jar wants more and so do I. Damn."],
@@ -278,7 +281,7 @@ const ROAST_PERSONA={
 "The Slow & Steady Saver":["Slow and Steady, {name}. Boring as hell, works every damn time. Respect.","Same deposit every time, {name}? Predictable. Effective. A little robotic. Good.","The tortoise, {name}. Slow. Annoying. Wins anyway, bitch.","Reliable as hell, {name}. You're basically a savings machine. Keep it.","You show up EVERY damn time, {name}. Shockingly consistent. Don't quit on me now."],
 "The Sprinter":["A Sprinter, {name}. Big bursts, then you GHOST. Classic. Show up more.","Go big or go home, huh {name}? Just don't stay home for three damn months.","Few moves, huge ones, {name}. Dramatic as hell. It works. Whatever.","You pounce, {name}, then vanish. Pounce MORE, ghost less, you menace.","Big-swing saver, {name}. When you commit you fucking COMMIT. So commit more often."],
 "The Sporadic Saver":["Sporadic, {name}? Translation: you save when you remember. Which is fucking rarely. Fix it.","A little whenever, {name}. Chaotic as hell. Set a reminder, you absolute menace.","The Sporadic Saver, {name}. No plan, pure vibes. Risky. The jar deserves better.","Random deposits, {name}. The jar never knows when you'll show. RUDE as hell. Schedule it.","Free spirit, {fullname}? Free spirits stay BROKE. Get a damn schedule."],
-"Just getting started":["No data yet, {name}. Add a deposit so I can properly roast your ass. Waiting.","Too early to roast, {name}. Feed the jar and give me some damn material.","Blank slate, {name}. Let's see if you're all talk. Prove it.","Nothing yet, {name}. Here to save or here for the damn vibes? Show me.","Just starting, {name}. The roast heats up the second you actually fucking save."]
+"Just getting started":["Not enough to roast your style yet, {name}. Keep saving and give me material.","A couple deposits in, {name}. Do a few more and I'll call your whole personality.","Still figuring out your deal, {name}. Keep going so I can judge properly.","Too early to label you, {name}. Prove your pattern, then I'll roast it.","Your saving style is still loading, {name}. Feed the jar so I can drag you accurately."]
 };
 const ROAST_COMBINED=["Every goal moving at ONCE, {name}? Look at you, a functional adult. Fucking shocking.","All your goals stacking, {name}. Didn't think you had it in you. Proud, damn it.","Juggling goals AND not dropping them, {name}? Miracles do happen.","Every jar getting fed, {name}. Quietly not broke. Don't let it go to your head.","Whole lineup CLIMBING, {name}. Okay fine, I'm fucking impressed. Don't make it weird."];
 
@@ -318,7 +321,7 @@ function computeGoal(goal){
   const cv=avgIn>0?sampleStdev(posIns)/avgIn:0;
   const lastType=lastOut>0?"withdrawal":(lastIn>0?"deposit":"none");
   let sizeTier=""; if(lastType==="deposit")sizeTier=lastIn>=avgIn*1.75?"big":(lastIn<=avgIn*0.5?"small":"mid");
-  let persona; if(avgIn===0)persona="Just getting started"; else if(cv<=0.5)persona="The Slow & Steady Saver"; else if(posIns.length<=3)persona="The Sprinter"; else persona="The Sporadic Saver";
+  let persona; if(posIns.length<3)persona="Just getting started"; else if(cv<=0.5)persona="The Slow & Steady Saver"; else if(posIns.length<=4)persona="The Sprinter"; else persona="The Sporadic Saver";
 
   const name=state.profile.nickname?.trim()||"babe";
   const fullName=state.profile.fullName?.trim()||name;
@@ -326,7 +329,8 @@ function computeGoal(goal){
   const ctx={name,fullName,goal:gname,left,pct,amt:0};
   const B=curBank();
 
-  const talkback=tokens(B.M[bucket][pickIdx(saved,7)],ctx);
+  const mileKey = pct>=1 ? 100 : (saved<=0 ? 0 : (pct<0.10 ? "low" : bucket));
+  const talkback=tokens(B.M[mileKey][pickIdx(saved,7)],ctx);
   let reaction;
   if(lastType==="none")reaction=tokens(B.F,ctx);
   else{const key=lastType==="withdrawal"?"withdrawal":"deposit|"+sizeTier; reaction=tokens(B.R[key][pickIdx(saved,3)],{...ctx,amt:lastType==="withdrawal"?lastOut:lastIn});}
