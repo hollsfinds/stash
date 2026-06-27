@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Stash — a no-download savings app</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coral:#F88378; --peach:#FBCEB1; --sage:#AFD9AE; --teal:#43B3AE; --espresso:#2C2421;
+  --bg:#FAF6F1; --card:#FFFFFF; --line:#ECE4DB; --muted:#8E837A; --ink:#2C2421;
+  --teal-d:#2C7C78; --coral-d:#9A3D2C; --in:#1D9E75; --out:#D85A30; --warn-bg:#FAEEDA; --warn-ink:#7A4B0B;
+  --serif:'Raleway','Poppins',sans-serif; --sans:'Poppins',-apple-system,Segoe UI,sans-serif;
+  --r:14px; --r-sm:10px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;max-width:100%;width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+#root{max-width:100%;overflow-x:hidden}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-weight:400;-webkit-font-smoothing:antialiased;line-height:1.5}
+button{font-family:inherit;cursor:pointer}
+input,select{font-family:inherit;font-size:15px;max-width:100%}
+.hidden{display:none!important}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+.app{display:grid;grid-template-columns:330px 1fr;min-height:100vh}
+.side{background:var(--espresso);color:#fff;padding:26px 18px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sideadd{background:#fff;border-radius:var(--r);padding:11px;margin-top:16px;color:var(--ink)}
+.sideadd .cardhd{color:var(--ink)}
+.brand{font-family:var(--serif);font-size:24px;font-weight:600;letter-spacing:.5px;margin:0 0 2px}
+.nav{display:flex;flex-direction:column;gap:4px;margin-top:24px}
+.nav button{display:flex;align-items:center;gap:12px;background:transparent;border:0;color:#e9e2db;padding:12px 14px;border-radius:var(--r-sm);font-size:15px;text-align:left;width:100%;transition:.15s}
+.nav button:hover{background:rgba(255,255,255,.08)}
+.nav button.on{background:var(--teal);color:#0c3a37;font-weight:500}
+.nav .ico{width:20px;text-align:center;font-size:17px}
+.side .foot{margin-top:auto;font-size:11px;opacity:.55;line-height:1.6}
+.addbtn{margin-top:18px;background:var(--coral);color:#fff;border:0;border-radius:var(--r-sm);padding:13px;font-size:15px;font-weight:500;width:100%}
+.addbtn:hover{filter:brightness(.96)}
+.plusbtn{margin-top:14px;background:var(--teal);color:#0c3a37;border:0;border-radius:var(--r-sm);padding:9px;font-size:13px;font-weight:500;cursor:pointer;width:100%}
+.plusbtn:hover{filter:brightness(.97)}
+
+.main{padding:30px 40px 80px;max-width:1120px;width:100%}
+.viewhead{font-family:var(--serif);font-size:23px;font-weight:600;margin:0 0 3px}
+.viewsub{color:var(--muted);font-size:13px;margin:0 0 14px}
+.topgrid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px;align-items:stretch}
+.chgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.topgrid>*,.chgrid>*,.chartcard{min-width:0}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:15px 18px}
+.cardhd{font-family:var(--serif);font-size:15px;font-weight:600}
+.grid{display:grid;gap:16px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:9px 12px}
+.tile .lab{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin:0 0 3px}
+.tile .val{font-size:14px;font-weight:500;font-family:var(--sans)}
+
+.hero{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 22px;margin-bottom:16px}
+.talk{background:#E6F4F3;color:var(--teal-d);border-radius:var(--r-sm);padding:10px 14px;font-size:15px;margin:0 0 12px;display:flex;gap:10px;align-items:flex-start}
+.talk .q{font-size:20px;line-height:1}
+.heronums{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.heronums .big{font-family:var(--sans);font-size:32px;font-weight:600;line-height:1}
+.heronums .of{color:var(--muted);font-size:15px}
+.heronums .pc{margin-left:auto;font-family:var(--sans);font-size:28px;color:var(--teal-d);font-weight:600}
+.hlab{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--teal-d);font-weight:500;margin-bottom:2px}
+.hero .big{font-family:var(--sans);font-size:40px;font-weight:600;line-height:1;color:var(--ink)}
+.barwrap{height:16px;border-radius:8px;background:var(--peach);margin:12px 0 4px;overflow:hidden}
+.bar{height:100%;background:var(--teal);width:0;border-radius:9px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.barscale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+
+.gcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:11px 14px;cursor:pointer;transition:.15s}
+.gcard:hover{border-color:var(--teal);transform:translateY(-2px)}
+.gbar{height:10px;border-radius:5px;background:var(--peach);margin:12px 0 6px;overflow:hidden}
+.gbar div{height:100%;background:var(--teal)}
+
+.qrow{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.ql{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+.qrow input,.qrow select{padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink)}
+.qrow input:focus,.qrow select:focus{outline:none;border-color:var(--teal)}
+
+.search{width:100%;max-width:360px;padding:11px 14px;border:1px solid var(--line);border-radius:var(--r-sm);margin-bottom:16px;background:#fff;color:var(--ink)}
+.search:focus{outline:none;border-color:var(--teal)}
+.act{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px;gap:12px}
+.act:last-child{border-bottom:0}
+.act .meta{color:var(--muted);font-size:13px}
+.gtag{font-size:11px;background:#F1ECE6;color:#6a625b;border-radius:10px;padding:2px 9px;margin-right:8px}
+.amtin{color:var(--in);font-weight:500}
+.amtout{color:var(--out);font-weight:500}
+
+.ladder{display:flex;gap:6px}
+.rung{flex:1;height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px}
+
+.persona{display:flex;gap:14px;align-items:center;background:#E6F4F3;color:var(--teal-d);border-radius:var(--r);padding:16px 20px;margin-top:18px}
+.persona .ico{font-size:26px}
+.persona b{display:block;font-family:var(--serif);font-size:16px}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.field input,.field select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--teal)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn{background:var(--teal);color:#0c3a37;border:0;border-radius:var(--r-sm);padding:13px 22px;font-size:15px;font-weight:500}
+.btn:hover{filter:brightness(.97)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.coral{background:var(--coral);color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:none}
+.seg{display:inline-flex;background:#F1ECE6;border-radius:6px;padding:4px;gap:4px}
+.seg button{border:0;background:transparent;padding:14px 18px;border-radius:4px;font-size:14px;color:var(--muted);line-height:1}
+.seg button.on{background:#fff;color:var(--ink);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+.warn{background:var(--warn-bg);color:var(--warn-ink);border:1px solid #E6D3A8;border-radius:var(--r);padding:16px 18px;font-size:14px;line-height:1.55;display:flex;gap:12px}
+.warn .ico{font-size:22px;flex-shrink:0}
+.warn b{font-weight:600}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(120px);background:var(--espresso);color:#fff;padding:15px 22px;border-radius:var(--r);font-size:15px;box-shadow:0 8px 30px rgba(0,0,0,.25);transition:transform .4s cubic-bezier(.2,.8,.3,1);z-index:60;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 16px;font-size:14px;color:var(--muted)}
+.pill.on{background:var(--teal);color:#0c3a37;border-color:var(--teal);font-weight:500}
+
+.chartcard{display:flex;flex-direction:column}
+.chartcard svg{display:block;width:100%}
+.chartpoint{cursor:pointer}
+.charttip{position:absolute;background:#2C2421;color:#fff;font-size:11px;line-height:1.5;padding:7px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;display:none;z-index:5;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.stattip{position:fixed;background:#2C2421;color:#fff;font-size:12px;line-height:1.4;padding:8px 11px;border-radius:8px;max-width:240px;pointer-events:none;display:none;z-index:200;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.capd{font-size:13px;color:var(--muted);min-height:20px;margin-top:10px}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:4px;flex-wrap:wrap}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+.scrim{position:fixed;inset:0;background:rgba(20,15,12,.5);display:flex;align-items:center;justify-content:center;z-index:80;padding:20px}
+.modal{background:#fff;border-radius:var(--r);padding:26px 26px 22px;max-width:440px;width:100%}
+.modal h3{font-family:var(--serif);font-size:21px;margin:0 0 14px}
+.modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden}
+.confetti span{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:fall 2.6s linear forwards}
+@keyframes fall{to{transform:translateY(106vh) rotate(540deg);opacity:.85}}
+.celebrate{position:fixed;top:-140px;left:50%;transform:translateX(-50%);background:#fff;border:2px solid var(--teal);border-radius:var(--r);padding:15px 28px;text-align:center;z-index:95;box-shadow:0 12px 40px rgba(0,0,0,.18);animation:drop 3.6s cubic-bezier(.2,.85,.3,1) forwards}
+.celebrate .big{font-family:var(--serif);font-size:22px;color:var(--teal-d);font-weight:600}
+.celebrate .sub{font-size:13px;color:var(--muted);margin-top:2px}
+@keyframes drop{0%{top:-140px;opacity:0}14%{top:26px;opacity:1}82%{top:26px;opacity:1}100%{top:26px;opacity:0}}
+
+@media(max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;align-items:center;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:50;gap:0;border-top:1px solid #000;overflow:hidden}
+  .brand,.side .foot,.addbtn,.sideadd,.plusbtn{display:none}
+  .nav{flex-direction:row;margin:0;width:100%;gap:0;overflow:hidden}
+  .nav button{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;font-size:10px;padding:8px 4px;border-radius:8px}
+  .nav button.on{background:transparent;color:var(--teal)}
+  .nav .ico{font-size:21px}
+  .main{padding:24px 18px calc(110px + env(safe-area-inset-bottom))}
+  .topgrid{grid-template-columns:1fr}
+  .chgrid{grid-template-columns:1fr}
+  .viewhead{font-size:22px}
+  .heronums .big{font-size:32px}
+  .hero .big{font-size:30px}
+  .herobar{gap:14px 16px}
+  .herobar-mid{flex:1 1 100%!important;max-width:none!important;order:3}
+  .herobar>div:first-child{order:1}
+  .herobar>div:last-child{order:2;margin-left:auto;text-align:right}
+  .pill{padding:9px 14px!important;font-size:13px!important}
+  .btn.ghost{min-height:42px}
+  .tile{padding:13px 12px}
+  .charttip{white-space:normal;max-width:62vw}
+  .stattip{max-width:74vw;font-size:13px}
+  .fab{display:flex!important}
+}
+.fab{display:none;position:fixed;right:18px;bottom:74px;width:58px;height:58px;border-radius:50%;background:var(--coral);color:#fff;border:0;font-size:28px;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(248,131,120,.5);z-index:55}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<button class="fab" onclick="openAddModal()" aria-label="Add a deposit">+</button>
+<div class="toast" id="toast"></div>
+<div class="stattip" id="stattip"></div>
+<div id="modalHost"></div>
+
+<script>
+/* ============================================================
+   STASH — single-file multi-goal savings PWA (Sassy tier)
+   Talk-back engine ported verbatim from the Sassy Google Sheet.
+   ============================================================ */
+
+/* ---------- MESSAGE BANKS (ported verbatim) ---------- */
+const MILESTONE = {
+0:["Day one energy, {name}. The hardest part is starting and you just did it!","Zero to something, {name}. Every dollar in here is a tiny flex!","We are off, {name}. {goal} is not gonna fund itself, but look at you starting.","First deposits hit different, {name}. Keep that momentum, babe!","The jar is open, {name}. Now we feed it, let us go!"],
+10:["10% in, {name}. Small but mighty, keep stacking!","Look at you, {name}, already 10% toward {goal}, cute start!","10% down, {name}. {left} to go, but momentum is momentum.","Double digits, {name}. The snowball is officially rolling!","10%, {name}. Not nothing babe, keep feeding the damn jar!"],
+20:["20%, {name}. You are actually doing the thing, proud of you!","One fifth of the way, {name}. {goal} is getting nervous!","20% saved and still going? Iconic, {name}.","20%, {name}. {left} left, but you have the rhythm now!","A solid 20%, {name}. The habit is sticking, hell yeah!"],
+30:["30%, {name}. Officially past just started, keep rolling!","Almost a third of the way to {goal}, {name}. Look at you!","30% in the bag, {name}. The momentum is real.","30%, {name}. {left} to go, but you are making this look easy!","30%, {name}. Future you is already saying thank you!"],
+40:["40%, {name}. Nearly halfway, do not you dare slow down!","40% toward {goal}, {name}. The finish line is getting flirty!","Almost halfway, {name}. 40% and climbing.","40% saved, {name}. {left} left, you so got this!","40%, {name}. The jar is getting heavy, love that for you!"],
+50:["HALFWAY, {name}. 50% to {goal}, pop something, you earned it!","50%, {name}. It is all downhill from here, babe!","Halfway home, {name}. The hard part is behind you.","50% saved, {name}. {left} to go, and you are cruising!","Halfway, {name}. Officially closer to {goal} than to broke, hell yeah!"],
+60:["60%, {name}. More done than not, keep that energy!","Past halfway and climbing, {name}. {goal} is so close!","60% in, {name}. You are in the home stretch mindset now.","60%, {name}. Only {left} left, do not blink, you are almost there!","60%, {name}. The momentum is doing the heavy lifting now, damn!"],
+70:["70%, {name}. The end is genuinely in sight, push!","70% toward {goal}, {name}. So close you can taste it!","Almost there, {name}. 70% and rolling fast.","70% saved, {name}. {left} left, finish what you started!","70%, {name}. You have basically already won this thing!"],
+80:["80%, {name}. Do NOT stop now, you are so close!","80% to {goal}, {name}. The last stretch is the sweetest!","Only 20% left, {name}. 80% done and dusted.","80% saved, {name}. {left} to go, the finish line is right there!","80%, {name}. Smell that? That is victory, babe!"],
+90:["90%, {name}. One more push and {goal} is YOURS!","90% there, {name}. Do not you dare quit at the 1-yard line!","So close it hurts, {name}. 90% and counting.","90% saved, {name}. Just {left} left, go finish the damn thing!","90%, {name}. This is the part where you sprint!"],
+100:["GOAL HIT, {name}. 100% funded, you absolute legend, go you!","{goal}: FUNDED, {name}. You did that, damn, obsessed with you!","100%, {name}. Treat yourself, you earned every dollar of this.","Money goal crushed, {name}. That is a whole flex, proud of you!","Done and DONE, {name}. {goal} is fully funded, legend behavior!"]
+};
+const REACTION = {
+"deposit|big":["{amt}? Look at you go, {name}, big flex!","Whoa, {amt} in one shot, {name}. Showoff, and proud of you!","{amt} deposit? {name}, the sofa is shaking.","Massive move, {name}. {amt} straight in the jar, hell yeah!","{amt} in one go? {name}, you absolute machine!"],
+"deposit|mid":["{amt} in, {name}. Steady and solid, love it!","Another {amt} stacked, {name}. Keep that rhythm!","{amt} logged, {name}. The jar says thank you.","Nice, {amt} closer, {name}. Momentum is momentum!","{amt} in the bag, {name}. Quietly crushing it!"],
+"deposit|small":["{amt}? Every dollar counts, {name}, truly!","Small but mighty, {name}. {amt} still moves the needle!","{amt} in, {name}. No deposit is too tiny, keep going.","Hey, {amt} is {amt}, {name}. The jar is not picky!","{amt} added, {name}. Little drops fill the damn bucket!"],
+"withdrawal":["Raiding the jar for {amt}, {name}? Worth it, I hope.","{amt} back out, {name}. Life happens, put it back when you can.","Pulled {amt}, {name}. No judgment, but the jar is a little sad.","{amt} withdrawal, {name}. Easy now, that sofa will not buy itself!","Out goes {amt}, {name}. We forgive you, once, damn it."]
+};
+const PERSONA = {
+"The Slow & Steady Saver":["You are the Slow and Steady type, {name}. Consistency wins!","Steady as they come, {name}. Same energy every time, respect!","The tortoise, {name}, and the tortoise wins. Keep it up.","Reliable deposits, {name}. Boring? Maybe. Effective? Hell yes!","You show up, {name}. Every time, that is the whole damn secret!"],
+"The Sprinter":["You are a Sprinter, {name}. Big bursts, big results!","Go big or go home, huh {name}? Love the firepower!","Few moves, mighty ones, {name}. The Sprinter strikes.","You do not nibble, {name}, you pounce, Sprinter energy!","Big-swing saver, {name}. When you commit, you damn well COMMIT!"],
+"The Sporadic Saver":["You are a bit Sporadic, {name}, whenever the mood strikes, huh?","Random but real, {name}. A little here, a little there, it adds up!","The Sporadic Saver, {name}. Chaotic good, we will take it.","No pattern, no problem, {name}. You still show up, mostly!","Free spirit saver, {name}. Maybe set a reminder, just saying!"],
+"Just getting started":["Fresh start, {name}. Log a deposit and I will size you up!","Too early to call it, {name}. Feed the jar and we will talk!","Blank slate, {name}. Let us see what kind of saver you are.","No data yet, {name}. Add a deposit and watch me judge, lovingly!","Just getting going, {name}. The personality reveal awaits!"]
+};
+const COMBINED_TALK=[
+"Money moving on every goal, {name}. That's how it's done!",
+"All your goals are stacking at once, {name}. Look at you go!",
+"Juggling goals like a pro, {name}. Keep that momentum!",
+"Every goal's getting fed, {name}. Quietly crushing it!",
+"Your whole lineup is climbing, {name}. Proud of you!"
+];
+
+/* ---------- ENGINE ---------- */
+const PHI=0.6180339887, DAY=86400000;
+const frac=x=>x-Math.floor(x);
+const pickIdx=(saved,seed)=>Math.floor(5*frac((Math.round(saved*100)+seed)*PHI));
+const money=n=>(n<0?"-$":"$")+Math.abs(Math.round(n)).toLocaleString("en-US");
+const todayIso=()=>new Date().toISOString().slice(0,10);
+const dateMs=iso=>new Date(iso+"T00:00:00").getTime();
+function tokens(s,c){return s.replace(/{fullname}/g,c.fullName).replace(/{name}/g,c.name).replace(/{goal}/g,c.goal).replace(/{left}/g,money(c.left)).replace(/{pct}/g,Math.round(c.pct*100)+"%").replace(/{amt}/g,money(c.amt||0));}
+function sampleStdev(a){if(a.length<2)return 0;const m=a.reduce((x,y)=>x+y,0)/a.length;return Math.sqrt(a.reduce((x,y)=>x+(y-m)*(y-m),0)/(a.length-1));}
+
+function computeGoal(goal){
+  const d=(goal.deposits||[]).slice().filter(x=>x.date).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  const ins=d.map(x=>+x.in||0), outs=d.map(x=>+x.out||0);
+  const saved=ins.reduce((a,b)=>a+b,0)-outs.reduce((a,b)=>a+b,0);
+  const target=+goal.target||0;
+  const pct=target>0?saved/target:0;
+  const bucket=pct>=1?100:Math.floor((pct*100)/10)*10;
+  const left=Math.max(target-saved,0);
+  const count=d.length, last=d[count-1]||null;
+  const lastIn=last?(+last.in||0):0, lastOut=last?(+last.out||0):0;
+  const posIns=ins.filter(x=>x>0);
+  const avgIn=posIns.length?posIns.reduce((a,b)=>a+b,0)/posIns.length:0;
+  const cv=avgIn>0?sampleStdev(posIns)/avgIn:0;
+  const lastType=lastOut>0?"withdrawal":(lastIn>0?"deposit":"none");
+  let sizeTier=""; if(lastType==="deposit")sizeTier=lastIn>=avgIn*1.75?"big":(lastIn<=avgIn*0.5?"small":"mid");
+  let persona; if(avgIn===0)persona="Just getting started"; else if(cv<=0.5)persona="The Slow & Steady Saver"; else if(posIns.length<=3)persona="The Sprinter"; else persona="The Sporadic Saver";
+
+  const name=state.profile.nickname?.trim()||"babe";
+  const fullName=state.profile.fullName?.trim()||name;
+  const gname=goal.name?.trim()||"your goal";
+  const ctx={name,fullName,goal:gname,left,pct,amt:0};
+
+  const talkback=tokens(MILESTONE[bucket][pickIdx(saved,7)],ctx);
+  let reaction;
+  if(lastType==="none")reaction="Log your first deposit, "+name+"!";
+  else{const key=lastType==="withdrawal"?"withdrawal":"deposit|"+sizeTier; reaction=tokens(REACTION[key][pickIdx(saved,3)],{...ctx,amt:lastType==="withdrawal"?lastOut:lastIn});}
+  const personaBlurb=tokens(PERSONA[persona][pickIdx(saved,5)],ctx);
+  let special=""; if(pct>=1)special="GOAL HIT, "+name+"! Pop the bubbly, you absolute legend."; else if(pct>=0.9)special="90%, "+name+". One more push, do NOT stop now!"; else if(pct>=0.45&&pct<0.55)special="Halfway, "+name+". It is all downhill from here, babe!";
+
+  const biggest=posIns.length?Math.max(...posIns):0;
+  const today=new Date(); today.setHours(0,0,0,0); const todayMs=today.getTime();
+  const startMs=goal.startDate?dateMs(goal.startDate):(d.length?dateMs(d[0].date):todayMs);
+  const daysSaving=Math.max(Math.round((todayMs-startMs)/DAY),0);
+  const targetMs=goal.targetDate?dateMs(goal.targetDate):null;
+  let projected="—", projMs=null;
+  if(saved>=target&&target>0)projected="Done!";
+  else if(count>=2&&daysSaving>0&&saved>0){const rate=saved/daysSaving; if(rate>0){const need=Math.ceil(left/rate); projMs=todayMs+need*DAY; projected="About "+new Date(projMs).toLocaleDateString("en-US",{month:"short",day:"numeric"});}}
+  let nextMile=null; if(pct<1){const nb=Math.min(bucket+10,100); nextMile={amt:Math.max(target*nb/100-saved,0),pct:nb};}
+  let neededWeekly=null; if(targetMs&&targetMs>todayMs&&left>0){const wks=(targetMs-todayMs)/(7*DAY); if(wks>0)neededWeekly=left/wks;}
+
+  return {id:goal.id,gname,saved,target,pct,bucket,left,count,avgIn,biggest,daysSaving,projected,nextMile,neededWeekly,
+    talkback,reaction,personaBlurb,persona,special,lastType,name,deposits:d,startMs,todayMs,targetMs,projMs};
+}
+
+/* ---------- STATE ---------- */
+const KEY="stash_v1";
+const MAX_GOALS=2; /* cap for this version once Plus exists */
+const GOAL_LOCK=false; /* keep false for now (no cap). Flip to true when Stash Plus launches to cap this version at MAX_GOALS and drive upgrades. */
+const FEEDBACK_KEY=""; /* paste your free Web3Forms access key here (from web3forms.com) to turn on feedback emails */
+const STASH_SCHEMA=1; /* bump if the data shape changes, so Plus can migrate old exports */
+const PLUS_IMPORT_URL=""; /* when Stash Plus (Lovable) is live, set its import URL here.
+  UPGRADE CONTRACT — Plus reads the handoff at:  <PLUS_IMPORT_URL>#stash=<base64url(JSON)>
+  decoded JSON = { schemaVersion, profile:{nickname,fullName}, voice:{tier,enabled}, goals:[{id,name,target,startDate,targetDate,notes,deposits:[{id,date,note,in,out}]}] }
+  Plus should base64-decode the #stash fragment on load and import it; also accept the same shape via JSON file upload. */
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const SAMPLE={
+  profile:{nickname:"Holls",fullName:"Holly B"},
+  voice:{tier:"sassy",enabled:true},
+  activeGoalId:null,
+  goals:[
+    {id:uid(),name:"New sofa",target:2000,startDate:"2026-06-01",targetDate:"2026-12-01",deposits:[
+      {id:uid(),date:"2026-06-01",note:"Payday auto-save",in:200,out:0},
+      {id:uid(),date:"2026-06-15",note:"Round-up savings",in:150,out:0},
+      {id:uid(),date:"2026-06-18",note:"Pulled for the rug",in:0,out:100},
+      {id:uid(),date:"2026-06-24",note:"Payday auto-save",in:75,out:0},
+      {id:uid(),date:"2026-06-26",note:"Sold old chair",in:50,out:0},
+      {id:uid(),date:"2026-06-27",note:"Skipped takeout, saved it",in:25,out:0},
+      {id:uid(),date:"2026-07-01",note:"Birthday money",in:43,out:0},
+      {id:uid(),date:"2026-07-05",note:"Tax refund",in:1000,out:0}]},
+    {id:uid(),name:"Tulum trip",target:3000,startDate:"2026-05-01",targetDate:"2027-01-15",deposits:[
+      {id:uid(),date:"2026-05-10",note:"Sold concert tickets",in:300,out:0},
+      {id:uid(),date:"2026-06-01",note:"Monthly transfer",in:250,out:0},
+      {id:uid(),date:"2026-06-20",note:"Freelance check",in:400,out:0}]}
+  ]
+};
+let state=null, view="home", histSearch="", dir="in";
+function blank(){return {profile:{nickname:"",fullName:""},voice:{tier:"sassy",enabled:true},activeGoalId:null,goals:[],backup:{lastBackup:null,snoozeUntil:0,silenced:false}};}
+function migrate(s){
+  if(!s)return s;
+  if(!s.goals){ // old single-goal shape
+    s={profile:{nickname:s.setup?.nickname||"",fullName:s.setup?.fullName||""},voice:s.voice||{tier:"sassy",enabled:true},activeGoalId:null,
+       goals:[{id:uid(),name:s.setup?.goalName||"",target:+s.setup?.target||0,startDate:s.setup?.startDate||todayIso(),targetDate:s.setup?.targetDate||"",deposits:(s.deposits||[]).map(d=>({id:d.id||uid(),...d}))}]};
+  }
+  s.profile=s.profile||{nickname:"",fullName:""};
+  s.voice=s.voice||{tier:"sassy",enabled:true};
+  (s.goals||[]).forEach(g=>{ if(g.notes===undefined)g.notes=""; (g.deposits||[]).forEach(d=>{if(!d.id)d.id=uid();}); });
+  s.backup=s.backup||{lastBackup:null,snoozeUntil:0,silenced:false};
+  return s;
+}
+function load(){try{const r=localStorage.getItem(KEY);return r?migrate(JSON.parse(r)):null;}catch(e){return null;}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){alert("Could not save — your browser may be blocking storage.");}}
+
+/* ---------- helpers ---------- */
+const $=(s,el=document)=>el.querySelector(s);
+const esc=s=>(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const capFirst=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+const fmtDate=iso=>{if(!iso)return"";return new Date(iso+"T00:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});};
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),4200);}
+function go(v){view=v;if(v!=="history"&&v!=="activity")histSearch="";render();window.scrollTo(0,0);}
+const voiceOn=()=>state.voice.enabled;
+const goalById=id=>state.goals.find(g=>g.id===id);
+const currentGoal=()=>goalById(state.activeGoalId)||state.goals[0];
+function openGoal(id){state.activeGoalId=id;view="goal";save();render();window.scrollTo(0,0);}
+
+/* ---------- add entry ---------- */
+function addControls(picker){
+  dir="in";
+  const opts=picker?`<div><span class="ql">Which goal?</span><select id="f_goal">${state.goals.map(g=>`<option value="${g.id}" ${g.id===(currentGoal()&&currentGoal().id)?'selected':''}>${esc(g.name)}</option>`).join("")}</select></div>`:"";
+  return `<div class="qrow">
+    ${opts}
+    <div style="flex:1 1 120px"><span class="ql">Amount</span><input id="f_amt" type="number" inputmode="decimal" placeholder="Amount" style="width:100%"></div>
+    <div><span class="ql">In or out?</span><div class="seg" id="f_dir"><button class="on" data-dir="in" onclick="segPick(this)">Money in</button><button data-dir="out" onclick="segPick(this)">Money out</button></div></div>
+    <div><span class="ql">Date</span><input id="f_date" type="date" value="${todayIso()}"></div>
+    <div style="flex:1 1 160px"><span class="ql">Note (optional)</span><input id="f_note" type="text" placeholder="Add a note" style="width:100%"></div>
+    <button class="btn coral" onclick="addDeposit()">Add it</button>
+  </div>`;
+}
+function segPick(b){dir=b.dataset.dir;[...b.parentNode.children].forEach(x=>x.classList.toggle("on",x===b));}
+function addDeposit(){
+  const amt=parseFloat($("#f_amt").value);
+  if(!amt||amt<=0){toast("Pop in an amount first.");return;}
+  const gid=$("#f_goal")?$("#f_goal").value:(currentGoal()&&currentGoal().id);
+  const g=goalById(gid); if(!g){toast("Add a goal first.");return;}
+  const before=computeGoal(g).pct;
+  g.deposits.push({id:uid(),date:$("#f_date").value||todayIso(),note:$("#f_note").value.trim(),in:dir==="in"?amt:0,out:dir==="out"?amt:0});
+  g.deposits.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  save();
+  const c=computeGoal(g); state.activeGoalId=gid; view="goal";
+  const ci=crossInfo(before,c.pct);
+  render(); window.scrollTo(0,0);
+  setTimeout(()=>{ if(ci){confettiBurst(); celebrate(ci.label,"for "+g.name);} if(voiceOn()) toast(ci&&c.special?c.special:c.reaction); },360);
+}
+
+/* ---------- VIEWS ---------- */
+const tile=(v,l,d)=>`<div class="tile"${d?` data-tip="${esc(d)}" onmouseenter="statTip(this)" onmouseleave="statTipHide()" onclick="statTip(this,1)"`:""}><p class="lab">${l}</p><div class="val">${esc(v)}</div></div>`;
+const mini=(v,l,d)=>`<div${d?` data-tip="${esc(d)}" onmouseenter="statTip(this)" onmouseleave="statTipHide()" onclick="statTip(this,1)"`:""} style="cursor:default"><div style="font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:2px">${l}</div><div style="font-family:var(--sans);font-size:18px;font-weight:500;line-height:1.1">${esc(v)}</div></div>`;
+function heroBar(saved,goal,pct,sub,title,hidePct){
+  const center=hidePct?(sub||""):(Math.round(pct*100)+"% there"+(sub?" · "+sub:""));
+  return `${title?`<div class="cardhd" style="margin-bottom:12px">${esc(title)}</div>`:""}<div class="herobar" style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+    <div><div class="hlab">Saved</div><div class="big">${money(saved)}</div></div>
+    <div class="herobar-mid" style="flex:1;min-width:150px;max-width:300px">
+      <div style="text-align:center;font-size:12px;color:var(--teal-d);font-weight:500;margin-bottom:5px;min-height:16px">${center}</div>
+      <div class="barwrap" style="margin:0;height:10px"><div class="bar" style="width:${Math.min(pct*100,100)}%"></div></div>
+      <div class="barscale"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+    </div>
+    <div style="text-align:right"><div class="hlab">Goal</div><div class="big">${money(goal)}</div></div>
+  </div>`;
+}
+function rowHtml(r){const isIn=(+r.in||0)>0;return `<div class="act"><div><div>${esc(r.note||(isIn?"Deposit":"Withdrawal"))}</div><div class="meta">${fmtDate(r.date)}</div></div><div class="${isIn?'amtin':'amtout'}">${isIn?"+"+money(r.in):"-"+money(r.out)}</div></div>`;}
+
+function combinedGoal(){
+  const all=[]; state.goals.forEach(g=>(g.deposits||[]).forEach(d=>all.push({...d})));
+  const starts=state.goals.map(g=>g.startDate).filter(Boolean).sort();
+  const tdates=state.goals.map(g=>g.targetDate).filter(Boolean).sort();
+  return {id:"__all__",name:"all your goals",target:state.goals.reduce((a,g)=>a+(+g.target||0),0),
+    startDate:starts[0]||todayIso(),targetDate:tdates[tdates.length-1]||"",deposits:all};
+}
+function vOverview(){
+  const gs=state.goals.map(computeGoal);
+  const cc=computeGoal(combinedGoal());
+  const funded=gs.filter(c=>c.pct>=1).length;
+  const cards=gs.map(c=>`<div class="gcard" onclick="openGoalModal('${c.id}')">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px"><b style="font-family:var(--serif);font-size:14px">${esc(capFirst(c.gname))}</b><span style="font-size:11px;color:var(--muted)">${money(c.saved)} of ${money(c.target)}</span></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="gbar" style="flex:1;margin:0"><div style="width:${Math.min(c.pct*100,100)}%"></div></div>
+      <span style="white-space:nowrap;font-size:13px;color:var(--coral);font-weight:600">${Math.round(c.pct*100)}% <span style="color:var(--muted);font-weight:400;font-size:10px">of goal</span></span>
+    </div>
+  </div>`).join("");
+  const acts=allEntries().slice(0,5).map(r=>{const isIn=(+r.in||0)>0;return `<div class="act"><div><div><span class="gtag">${esc(r.goalName)}</span>${esc(r.note||(isIn?"Deposit":"Withdrawal"))}</div><div class="meta">${fmtDate(r.date)}</div></div><div class="${isIn?'amtin':'amtout'}">${isIn?"+"+money(r.in):"-"+money(r.out)}</div></div>`;}).join("")||`<div class="act"><span class="meta">No entries yet.</span></div>`;
+  return `
+  <h1 class="viewhead">Hey ${esc(cc.name==="babe"?"there":cc.name)}.</h1>
+  <p class="viewsub">Everything you're stacking toward, all in one place.</p>
+  ${state.goals.length?`<div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap"><span style="font-size:13px;color:var(--muted)">Open a goal's page:</span><select onchange="if(this.value)openGoal(this.value)" style="padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;max-width:100%"><option value="">Choose a goal…</option>${state.goals.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("")}</select></div>`:""}
+  <div class="topgrid" style="align-items:start">
+    <div style="min-width:0">
+      <div class="hero" style="margin-bottom:14px">
+        ${heroBar(cc.saved,cc.target,cc.pct,"across "+gs.length+" goals","All goals")}
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:12px 16px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
+          ${mini(money(cc.left),"left to save","Total still needed across all your goals to fund every target.")}
+          ${mini(funded+" of "+gs.length,"funded","How many of your goals have hit 100%.")}
+          ${mini(money(cc.biggest),"biggest deposit","Your single largest deposit across all goals.")}
+          ${mini(money(cc.avgIn),"average deposit","The average size of your money-in deposits.")}
+          ${mini(cc.daysSaving+" days","days saving","Days since your earliest goal's start date.")}
+        </div>
+        ${voiceOn()?`<div class="talk" style="margin:16px 0 0"><span>${esc(cc.special||tokens(COMBINED_TALK[pickIdx(cc.saved,7)],{name:cc.name,fullName:cc.name,goal:"your goals",left:cc.left,pct:cc.pct}))}</span></div>`:``}
+      </div>
+      <div class="chgrid">
+        <div class="card chartcard"><div class="cardhd">Saved over time · all goals</div>${chartGrowth(cc)}</div>
+        <div class="card chartcard"><div class="cardhd">Money in &amp; out</div>${chartFlow(cc)}</div>
+        <div class="card chartcard"><div class="cardhd">By month</div>${chartMonths(cc)}</div>
+        <div class="card chartcard"><div class="cardhd">Pace check</div>${pacePanel(gs)}</div>
+      </div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div class="cardhd">Recent activity</div><button class="btn ghost" style="padding:6px 12px;font-size:13px" onclick="go('activity')">See all</button></div>${acts}</div>
+    </div>
+    <div>
+      ${whatIfPanel(gs)}
+      <div style="display:flex;flex-direction:column;gap:10px">${cards}</div>
+      <button class="btn" style="width:100%;margin-top:10px;padding:9px;font-size:13px;background:#E6F4F3;color:var(--teal-d)" onclick="goalModal()">＋ New goal</button>
+    </div>
+  </div>`;
+}
+
+function vGoal(){
+  const g=currentGoal(); if(!g)return vOverview();
+  const c=computeGoal(g);
+  const acts=c.deposits.slice().reverse().slice(0,5).map(rowHtml).join("")||`<div class="act"><span class="meta">No entries yet.</span></div>`;
+  const multi=state.goals.length>1;
+  const switcher=multi?`<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+    <button class="btn ghost" style="padding:8px 14px;font-size:13px" onclick="go('home')">← All goals</button>
+    <select onchange="openGoal(this.value)" style="padding:9px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff">${state.goals.map(x=>`<option value="${x.id}" ${x.id===g.id?'selected':''}>${esc(x.name)}</option>`).join("")}</select></div>`:"";
+  return `
+  ${switcher}
+  <h1 class="viewhead">${esc(c.gname)}</h1>
+  <p class="viewsub">${money(c.saved)} of ${money(c.target)} saved.</p>
+  <div class="hero">
+    ${heroBar(c.saved,c.target,c.pct,"")}
+    ${voiceOn()?`<div class="talk" style="margin:16px 0 0"><span>${esc(c.special||c.talkback)}</span></div>`:``}
+  </div>
+
+  <div class="tiles" style="margin-bottom:18px">
+    ${tile(c.nextMile?`Just ${money(c.nextMile.amt)} to ${c.nextMile.pct}%`:"Goal reached!","next milestone","How much more to reach your next 10% mark.")}
+    ${tile(c.projected,"projected finish","When you'll hit this goal at your current saving pace.")}
+    ${tile(c.daysSaving+" days","days saving","Days since this goal's start date.")}
+    ${tile(money(c.biggest),"biggest deposit","Your largest single deposit toward this goal.")}
+    ${tile(money(c.avgIn),"average deposit","The average size of your deposits to this goal.")}
+    ${tile(money(c.left),"left to save","How much more to fully fund this goal.")}
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(290px,1fr));margin-bottom:18px">
+    <div class="card chartcard"><div class="cardhd">Saved over time</div>${chartGrowth(c)}</div>
+    <div class="card chartcard"><div class="cardhd">Money in &amp; out</div>${chartFlow(c)}</div>
+    <div class="card chartcard"><div class="cardhd">By month</div>${chartMonths(c)}</div>
+    <div class="card"><div class="cardhd">What if…</div>${whatIfCard(c)}</div>
+  </div>
+
+  ${voiceOn()?`<div class="persona"><span class="ico">✦</span><div><b>${esc(c.persona)}</b><span style="font-size:14px">${esc(c.personaBlurb)}</span></div></div>`:``}
+
+  <div class="card" style="margin-top:18px"><div class="cardhd" style="margin-bottom:8px">My notes</div>
+    <textarea id="goalNotes" placeholder="Jot anything about this goal — why it matters, ideas, reminders..." onblur="saveGoalNotes('${g.id}')" style="width:100%;min-height:90px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:14px;color:var(--ink);resize:vertical;background:#fff">${esc(g.notes||"")}</textarea>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div class="cardhd">Recent activity</div><button class="btn ghost" style="padding:7px 14px;font-size:13px" onclick="go('activity')">See all</button></div>
+    ${acts}
+  </div>`;
+}
+
+function addQuick(){
+  dir="in";
+  return `<div><span class="ql">Amount</span><input id="f_amt" type="number" inputmode="decimal" placeholder="Amount" style="width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm)"></div>
+  <div style="margin-top:12px"><span class="ql">In or out?</span><div class="seg" id="f_dir" style="display:flex;width:100%;margin-top:2px"><button class="on" data-dir="in" onclick="segPick(this)" style="flex:1">Money in</button><button data-dir="out" onclick="segPick(this)" style="flex:1">Money out</button></div></div>
+  <div class="row2" style="margin-top:12px"><div><span class="ql">Date</span><input id="f_date" type="date" value="${todayIso()}" style="width:100%"></div><div><span class="ql">Note</span><input id="f_note" placeholder="Add a note" style="width:100%"></div></div>
+  <button class="btn coral" style="width:100%;margin-top:14px" onclick="addDeposit()">Add it</button>`;
+}
+
+function whatIfCard(c){
+  const need=c.neededWeekly?`<p style="font-size:13px;color:var(--muted);margin:10px 0 0">To finish by your target date, save about <b style="color:var(--ink)">${money(c.neededWeekly)}/week</b>.</p>`:"";
+  return `<div class="qrow" style="margin-top:12px"><div style="flex:1"><span class="ql">If I save this each week</span><input id="wi_week" type="text" inputmode="decimal" placeholder="Per week ($)" style="width:100%" oninput="whatIf('${c.id}')"></div></div>
+  <p id="wi_out" class="capd">Type a weekly amount to see your finish date.</p>${need}`;
+}
+function whatIf(id){
+  const g=goalById(id), c=computeGoal(g), wk=parseFloat($("#wi_week").value), out=$("#wi_out");
+  if(!wk||wk<=0){out.textContent="Type a weekly amount to see your finish date.";return;}
+  if(c.left<=0){out.textContent="Already funded. Go you.";return;}
+  const weeks=Math.ceil(c.left/wk); const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+weeks*7);
+  out.textContent=`Saving ${money(wk)}/week, you'll hit ${g.name} around ${d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})} (${weeks} weeks).`;
+}
+
+function vAdd(){
+  if(!state.goals.length)return `<h1 class="viewhead">No goals yet</h1><p class="viewsub">Add a goal first.</p><button class="btn" onclick="goalModal()">＋ New goal</button>`;
+  return `<h1 class="viewhead">Track Deposit</h1><p class="viewsub">Log a deposit or withdrawal. Put it toward one goal, or split it across several.</p><div class="card" style="max-width:560px">${addUnified()}</div>`;
+}
+function numVal(el){ if(!el)return 0; return parseFloat(String(el.value).replace(/[^0-9.\-]/g,""))||0; }
+function dispMoney(n){ n=Math.round(n*100)/100; return "$"+n.toLocaleString("en-US",{minimumFractionDigits:(n%1?2:0),maximumFractionDigits:2}); }
+function fmtInput(el){ const v=numVal(el); el.value=v?dispMoney(v):""; }
+function rawInput(el){ const v=numVal(el); el.value=v?String(v):""; }
+function setAlloc(el,v){ if(el)el.value=v>0?dispMoney(v):""; }
+function allToGoal(id){ const total=numVal($("#f_total")); if(total<=0){toast("Enter an amount first.");return;} state.goals.forEach(g=>setAlloc($("#sp_"+g.id), g.id===id?total:0)); distUpdate(); }
+function addUnified(){
+  dir="in";
+  const ist="padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-sm)";
+  const head=`
+  <div class="row2" style="margin-bottom:6px;gap:8px">
+    <div><span class="ql">In or out?</span><div class="seg" id="f_dir" style="display:flex;width:100%;padding:3px"><button class="on" data-dir="in" onclick="segPick(this)" style="flex:1;padding:6px 0">In</button><button data-dir="out" onclick="segPick(this)" style="flex:1;padding:6px 0">Out</button></div></div>
+    <div><span class="ql">Date</span><input id="f_date" type="date" value="${todayIso()}" style="width:100%;${ist};padding:11px 10px;background:#fff;color:var(--ink)"></div>
+  </div>
+  <div style="margin-bottom:6px"><span class="ql">Amount</span><input id="f_total" type="text" inputmode="decimal" placeholder="$0" style="width:100%;${ist};font-size:15px" oninput="distUpdate()" onfocus="rawInput(this)" onblur="fmtInput(this);distUpdate()"></div>
+  <div style="margin-bottom:7px"><span class="ql">Note</span><input id="f_note" placeholder="Add a note" style="width:100%;${ist}"></div>`;
+  if(state.goals.length===1) return head+`<button class="btn coral" style="width:100%" onclick="addUnifiedSubmit()">Add it</button>`;
+  const rows=state.goals.map(g=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><div style="flex:1;font-size:13px">${esc(g.name)}</div><input id="sp_${g.id}" type="text" inputmode="decimal" placeholder="$0" style="width:100px;padding:6px 8px;border:1px solid var(--line);border-radius:var(--r-sm)" oninput="distUpdate()" onfocus="rawInput(this)" onblur="fmtInput(this);distUpdate()"><button class="pill" style="padding:4px 9px;font-size:11px" onclick="allToGoal('${g.id}')">All</button></div>`).join("");
+  return head+`
+  <div class="ql" style="margin-bottom:5px">Distribute</div>
+  <div class="pills" style="gap:5px;margin:0 0 7px">
+    <button class="pill" style="padding:4px 9px;font-size:11px" onclick="splitEven()">Even</button>
+    <button class="pill" style="padding:4px 9px;font-size:11px" onclick="splitByNeed()">By need</button>
+    <button class="pill" style="padding:4px 9px;font-size:11px" onclick="splitClosest()">Closest</button>
+    <button class="pill" style="padding:4px 9px;font-size:11px" onclick="clearAlloc()">Clear</button>
+  </div>
+  ${rows}
+  <p id="sp_total" class="capd" style="margin-top:4px">Enter an amount, then distribute it.</p>
+  <button class="btn coral" style="width:100%;margin-top:6px" onclick="addUnifiedSubmit()">Add it</button>`;
+}
+function distUpdate(){
+  const total=numVal($("#f_total")); let sum=0;
+  state.goals.forEach(g=>{sum+=numVal($("#sp_"+g.id));});
+  const o=$("#sp_total"); if(!o)return; const left=total-sum;
+  if(total<=0){o.textContent="Enter an amount, then distribute it.";o.style.color="";}
+  else if(Math.abs(left)<0.005){o.textContent="All set · "+dispMoney(total)+" distributed.";o.style.color="#1D9E75";}
+  else if(left>0){o.textContent=dispMoney(left)+" left to assign.";o.style.color="#D85A30";}
+  else{o.textContent="Over by "+dispMoney(-left)+".";o.style.color="#D85A30";}
+}
+function splitAmounts(total,weights){
+  const T=total, sum=weights.reduce((a,b)=>a+b,0), n=weights.length;
+  let amts = sum>0 ? weights.map(w=>Math.floor(T*w/sum)) : weights.map(()=>Math.floor(T/n));
+  let leftover=Math.round((T-amts.reduce((a,b)=>a+b,0))*100)/100;
+  const order=weights.map((w,i)=>({i,w})).filter(x=>sum<=0||x.w>0).sort((a,b)=>b.w-a.w);
+  let k=0;
+  while(leftover>=1-1e-9 && order.length){ amts[order[k%order.length].i]+=1; leftover=Math.round((leftover-1)*100)/100; k++; }
+  if(leftover>0.005 && order.length) amts[order[0].i]=Math.round((amts[order[0].i]+leftover)*100)/100;
+  return amts;
+}
+function splitEven(){
+  const total=numVal($("#f_total")); if(total<=0){toast("Enter an amount first.");return;}
+  const amts=splitAmounts(total,state.goals.map(()=>1));
+  state.goals.forEach((g,i)=>setAlloc($("#sp_"+g.id),amts[i])); distUpdate();
+}
+function splitByNeed(){
+  const total=numVal($("#f_total")); if(total<=0){toast("Enter an amount first.");return;}
+  const needs=state.goals.map(g=>Math.max((+g.target||0)-computeGoal(g).saved,0));
+  const amts=splitAmounts(total, needs.reduce((a,b)=>a+b,0)>0?needs:state.goals.map(()=>1));
+  state.goals.forEach((g,i)=>setAlloc($("#sp_"+g.id),amts[i])); distUpdate();
+}
+function splitClosest(){
+  const total=numVal($("#f_total")); if(total<=0){toast("Enter an amount first.");return;}
+  const arr=state.goals.map(g=>({g,need:Math.max((+g.target||0)-computeGoal(g).saved,0)})).sort((a,b)=>a.need-b.need);
+  const alloc={}; let rem=Math.round(total*100)/100;
+  arr.forEach(({g,need})=>{const give=Math.min(Math.floor(need),Math.floor(rem)); if(give>0){alloc[g.id]=(alloc[g.id]||0)+give; rem=Math.round((rem-give)*100)/100;}});
+  if(rem>0.005&&arr.length){const g=arr[arr.length-1].g; alloc[g.id]=Math.round(((alloc[g.id]||0)+rem)*100)/100;}
+  state.goals.forEach(g=>setAlloc($("#sp_"+g.id),alloc[g.id]||0)); distUpdate();
+}
+function clearAlloc(){state.goals.forEach(g=>{const el=$("#sp_"+g.id);if(el)el.value="";});distUpdate();}
+function addUnifiedSubmit(){
+  const total=numVal($("#f_total"));
+  if(total<=0){toast("Enter an amount first.");return;}
+  const date=$("#f_date").value||todayIso(), note=$("#f_note").value.trim(), sid=uid();
+  let allocs=[];
+  if(state.goals.length===1){allocs=[{g:state.goals[0],amt:total}];}
+  else{
+    let sum=0; state.goals.forEach(g=>{const amt=numVal($("#sp_"+g.id)); if(amt>0){allocs.push({g,amt});sum+=amt;}});
+    if(!allocs.length){toast("Distribute your amount to at least one goal.");return;}
+    if(Math.abs(sum-total)>=0.005){toast("Your distribution ("+dispMoney(sum)+") has to add up to your "+(dir==="in"?"deposit":"withdrawal")+" ("+dispMoney(total)+").");return;}
+  }
+  let best=null,bestGoal=null,lastG=null;
+  allocs.forEach(({g,amt})=>{const before=computeGoal(g).pct; g.deposits.push({id:uid(),date,note,in:dir==="in"?amt:0,out:dir==="out"?amt:0,split:sid}); g.deposits.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0); lastG=g; const ci=crossInfo(before,computeGoal(g).pct); if(ci&&(!best||ci.t>best.t)){best=ci;bestGoal=g;}});
+  save(); closeModal(); view="home"; render(); window.scrollTo(0,0);
+  setTimeout(()=>{
+    if(best){confettiBurst();celebrate(best.label,"for "+bestGoal.name);}
+    if(allocs.length===1){const c=computeGoal(lastG); if(voiceOn())toast(best&&c.special?c.special:c.reaction);}
+    else toast((dir==="in"?"Added ":"Pulled ")+money(total)+" across "+allocs.length+" goals.");
+  },360);
+}
+
+function allEntries(){
+  const rows=[];
+  state.goals.forEach(g=>(g.deposits||[]).forEach(d=>rows.push({...d,goalId:g.id,goalName:g.name})));
+  rows.sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
+  return rows;
+}
+function histRows(){
+  const q=histSearch.trim().toLowerCase();
+  let list=allEntries();
+  if(q)list=list.filter(r=>((r.note||"")+" "+fmtDate(r.date)+" "+r.goalName+" "+(r.in||0)+" "+(r.out||0)).toLowerCase().includes(q));
+  if(!list.length)return `<div class="act"><span class="meta">${q?"Nothing matches that search.":"Nothing logged yet."}</span></div>`;
+  return list.map(r=>{const isIn=(+r.in||0)>0;return `<div class="act"><div><div><span class="gtag">${esc(r.goalName)}</span>${esc(r.note||(isIn?"Deposit":"Withdrawal"))}</div><div class="meta">${fmtDate(r.date)}</div></div>
+    <div style="display:flex;align-items:center;gap:10px"><span class="${isIn?'amtin':'amtout'}">${isIn?"+"+money(r.in):"-"+money(r.out)}</span>
+    <button class="btn ghost" style="padding:5px 9px;font-size:12px" onclick="editRow('${r.goalId}','${r.id}')">Edit</button>
+    <button class="btn ghost" style="padding:5px 9px;font-size:12px" onclick="delRow('${r.goalId}','${r.id}')">Remove</button></div></div>`;}).join("");
+}
+function vActivity(){
+  return `<h1 class="viewhead">Activity</h1><p class="viewsub">Every entry across all your goals.</p>
+  <input class="search" id="histSearch" placeholder="Search notes, goals, dates, amounts…" value="${esc(histSearch)}" oninput="histFilter(this.value)">
+  <div class="card" id="histList">${histRows()}</div>`;
+}
+function histFilter(q){histSearch=q;const el=$("#histList");if(el)el.innerHTML=histRows();}
+function delRow(gid,id){confirmModal("Remove this entry?","It will be gone from your jar for good.",()=>{const g=goalById(gid);if(g)g.deposits=g.deposits.filter(d=>d.id!==id);save();render();});}
+function drill(dateIso){histSearch=fmtDate(dateIso);go("activity");}
+
+/* ---------- charts ---------- */
+function chartGrowth(c,ns=""){
+  const deps=c.deposits.slice().sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  if(!deps.length)return `<div class="capd" style="margin-top:8px">Add a deposit to see your trend.</div>`;
+  const dmap={},order=[];
+  deps.forEach(r=>{const k=r.date; if(!(k in dmap)){dmap[k]=0;order.push(k);} dmap[k]+=(+r.in||0)-(+r.out||0);});
+  const n=order.length; let run=0; window._g=window._g||{}; const G=(window._g[ns]=[]);
+  const cum=order.map((k,i)=>{const day=dmap[k]; run+=day; const isIn=day>=0;
+    G.push({xf:(n===1?0.5:i/(n-1)),html:`<b>${fmtDate(k)}</b><br><span style="color:${isIn?'#9FE1CB':'#F0997B'}">${isIn?'+'+money(day):'-'+money(Math.abs(day))}</span> that day · ${money(run)} total`});
+    return run;});
+  const W=300,H=60,pad=6, maxV=Math.max(...cum,1);
+  const X=i=>pad+(n===1?(W-2*pad)/2:(i/(n-1))*(W-2*pad));
+  const Y=v=>H-pad-(Math.max(v,0)/maxV)*(H-2*pad);
+  const line=cum.map((v,i)=>`${i?'L':'M'}${X(i).toFixed(1)} ${Y(v).toFixed(1)}`).join(" ");
+  const area=`${line} L${X(n-1).toFixed(1)} ${H-pad} L${X(0).toFixed(1)} ${H-pad} Z`;
+  const dots=cum.map((v,i)=>`<div onmouseover="growthTip('${ns}',${i},0,this)" onmouseout="growthTipHide('${ns}')" ontouchstart="growthTip('${ns}',${i},1,this);event.preventDefault()" style="position:absolute;left:${(X(i)/W*100).toFixed(2)}%;top:${(Y(v)/H*100).toFixed(2)}%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#2C7C78;cursor:pointer"></div>`).join("");
+  const firstMs=Math.min(c.startMs||dateMs(deps[0].date),dateMs(deps[0].date)), endMs=Math.max(dateMs(deps[deps.length-1].date),c.todayMs);
+  const startLab=new Date(firstMs).toLocaleDateString("en-US",{month:"short",day:"numeric"}), endLab=new Date(endMs).toLocaleDateString("en-US",{month:"short",day:"numeric"});
+  let status;
+  if(c.pct>=1) status="Funded — every dollar is in.";
+  else if(c.projMs){ const proj=new Date(c.projMs).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); status=`On pace to finish around ${proj}.`; }
+  else { const need=Math.max(2-c.count,0); status=need>0?`Add ${need} more deposit${need>1?'s':''} and I'll forecast your finish.`:"Save again in a few days and I'll forecast your finish."; }
+  return `<div style="flex:1;display:flex;flex-direction:column;margin-top:6px">
+    <div style="position:relative;flex:1;min-height:72px">
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:100%;display:block">
+        <path d="${area}" fill="#43B3AE" opacity="0.15"/>
+        <path d="${line}" fill="none" stroke="#43B3AE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+      </svg>
+      ${dots}
+      <div id="${ns}gtip" class="charttip"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:5px"><span>${startLab}</span><span>${endLab}</span></div>
+    <div style="margin-top:12px">
+      <div style="font-family:var(--sans);font-size:22px;font-weight:600;color:var(--ink);line-height:1.1">${money(run)} <span style="font-size:13px;color:var(--muted);font-weight:400">of ${money(c.target)}</span></div>
+      <div style="font-size:12px;color:var(--teal-d);margin-top:4px">${status}</div>
+    </div>
+  </div>`;
+}
+function chartFlow(c,ns=""){
+  window._f=window._f||{}; const F=(window._f[ns]=[]);
+  if(!c.deposits.length)return `<div class="capd" style="margin-top:8px">Add a deposit to see this.</div>`;
+  const map={},order=[];
+  c.deposits.forEach(r=>{const k=r.date; if(!(k in map)){map[k]={in:0,out:0,txns:[]};order.push(k);} map[k].in+=(+r.in||0); map[k].out+=(+r.out||0); map[k].txns.push(r);});
+  order.sort();
+  const days=order.map(k=>({date:k,net:map[k].in-map[k].out,txns:map[k].txns})).slice(-14);
+  const maxBar=Math.max(...days.map(d=>Math.abs(d.net)),1), n=days.length;
+  const bars=days.map((d,i)=>{const pos=d.net>=0,h=Math.max(Math.abs(d.net)/maxBar*78,3),col=pos?'var(--teal)':'var(--out)';
+    F.push({date:fmtDate(d.date),txns:d.txns});
+    const md=new Date(d.date+"T00:00:00").toLocaleDateString("en-US",{month:"numeric",day:"numeric"});
+    return `<div onmouseover="flowTip('${ns}',${i},0,this)" onmouseout="flowTipHide('${ns}')" ontouchstart="flowTip('${ns}',${i},1,this)" onclick="drill('${d.date}')" style="flex:1 1 0;min-width:0;max-width:46px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;cursor:pointer">
+      <div style="font-size:9px;color:${pos?'var(--teal-d)':'var(--out)'};margin-bottom:3px;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center">${pos?'+':'-'}${money(Math.abs(d.net))}</div>
+      <div style="width:70%;max-width:24px;height:${h.toFixed(1)}%;min-height:3px;background:${col};border-radius:5px 5px 0 0"></div>
+      <div style="font-size:9px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center">${md}</div>
+    </div>`;}).join("");
+  return `<div style="flex:1;display:flex;flex-direction:column;margin-top:6px">
+    <div style="font-size:9px;color:var(--muted);margin-bottom:2px">$ per day · tallest = ${money(maxBar)}${order.length>14?` · last 14 days`:``}</div>
+    <div style="position:relative;flex:1;display:flex;align-items:stretch;justify-content:flex-start;gap:8px;min-height:130px;overflow:hidden;padding-bottom:2px">${bars}<div id="${ns}ftip" class="charttip"></div></div>
+    <div class="legend" style="margin-top:8px"><span><i style="background:#43B3AE"></i>Net saved that day</span><span><i style="background:#D85A30"></i>Net spent that day</span></div>
+    <div class="capd" style="line-height:1.5">Each bar is one day. Taller = bigger day. Tap a bar for the details.</div>
+  </div>`;
+}
+function chartMonths(c,ns=""){
+  const map={};
+  c.deposits.forEach(r=>{const k=r.date.slice(0,7); if(!map[k])map[k]={in:0,out:0}; map[k].in+=(+r.in||0); map[k].out+=(+r.out||0);});
+  const allKeys=Object.keys(map).sort(); if(!allKeys.length)return `<div class="capd" style="margin-top:8px">Add deposits to see monthly totals.</div>`;
+  const keys=allKeys.slice(-12);
+  const nets=keys.map(k=>map[k].in-map[k].out), maxAbs=Math.max(...nets.map(Math.abs),1); window._m=window._m||{}; const M=(window._m[ns]=[]);
+  const bars=keys.map((k,i)=>{const v=nets[i],pos=v>=0,h=Math.max(Math.abs(v)/maxAbs*78,5);
+    const my=new Date(k+"-01T00:00:00").toLocaleDateString("en-US",{month:"long",year:"numeric"});
+    M.push({xf:(i+0.5)/keys.length,html:`<b>${my}</b><br>net ${pos?'+':'-'}${money(Math.abs(v))}<br><span style="color:#9FE1CB">in ${money(map[k].in)}</span> · <span style="color:#F0997B">out ${money(map[k].out)}</span>`});
+    return `<div onmouseover="monthTip('${ns}',${i},0,this)" onmouseout="monthTipHide('${ns}')" ontouchstart="monthTip('${ns}',${i},1,this)" style="flex:1 1 0;min-width:0;max-width:52px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;cursor:pointer">
+      <div style="font-size:10px;color:#2C2421;margin-bottom:4px;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center">${pos?"+":"-"}${money(Math.abs(v))}</div>
+      <div style="width:70%;max-width:30px;height:${h.toFixed(1)}%;background:${pos?'var(--teal)':'var(--out)'};border-radius:5px 5px 0 0"></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center">${new Date(k+"-01T00:00:00").toLocaleDateString("en-US",{month:"short"})}</div>
+    </div>`;}).join("");
+  return `<div style="flex:1;display:flex;flex-direction:column;margin-top:6px">
+    <div style="position:relative;flex:1;display:flex;align-items:stretch;justify-content:flex-start;gap:8px;min-height:130px;overflow:hidden;padding-bottom:2px">${bars}<div id="${ns}mtip" class="charttip"></div></div>
+    <div class="capd" style="margin-top:8px">Net saved each month.${allKeys.length>12?` Last 12 months.`:``}</div>
+  </div>`;
+}
+function pacePanel(gs){
+  const rows=gs.map(c=>{
+    let badge,bg,col,note="";
+    if(c.pct>=1){badge="Funded";bg="#AFD9AE";col="#1f3a1e";}
+    else if(c.targetMs&&c.projMs){
+      const proj=new Date(c.projMs).toLocaleDateString("en-US",{month:"short",day:"numeric"}), tgt=new Date(c.targetMs).toLocaleDateString("en-US",{month:"short",day:"numeric"});
+      if(c.projMs<=c.targetMs){badge="On track";bg="#E6F4F3";col="#2C7C78";} else {badge="Behind";bg="#FAECE7";col="#9A3D2C";}
+      note="~"+proj+" finish · "+tgt+" target";
+    } else if(!c.targetMs){badge="No deadline";bg="#F1ECE6";col="#6a625b";note="add a target date to track pace";}
+    else {badge="Just started";bg="#F1ECE6";col="#6a625b";note="needs a few deposits";}
+    return `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)">
+      <div style="min-width:0"><div style="font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(capFirst(c.gname))}</div>${note?`<div style="font-size:10px;color:var(--muted)">${esc(note)}</div>`:""}</div>
+      <span style="flex-shrink:0;background:${bg};color:${col};font-size:11px;font-weight:600;padding:3px 10px;border-radius:11px">${badge}</span>
+    </div>`;}).join("");
+  return `<div style="flex:1;display:flex;flex-direction:column;margin-top:6px">
+    <div style="flex:1">${rows}</div>
+    <div class="capd" style="margin-top:8px">On track to hit each goal's target date?</div>
+  </div>`;
+}
+function ptHover(w,i){
+  const e=$("#"+w+"cap"); if(!e)return;
+  if(w==='f'){ const d=window._f[i]; e.innerHTML=`<b>${esc(d.date)}</b><br>`+d.txns.map(t=>{const isIn=(+t.in||0)>0; return `${esc(t.note||(isIn?'Deposit':'Withdrawal'))} <span style="color:${isIn?'#1D9E75':'#D85A30'};font-weight:500">${isIn?'+'+money(t.in):'-'+money(t.out)}</span>`;}).join("<br>"); }
+  else e.textContent=window._g[i];
+}
+function ptOut(w){const e=$("#"+w+"cap");if(!e)return;if(w==='g')e.textContent="Hover or tap a point to drill in.";else e.innerHTML="Each bar is one day. Hover or tap to see it.";}
+function tipShow(id,html,xf,auto){ const t=$("#"+id); if(!t)return; t.innerHTML=html; t.style.top="6px";
+  if(xf<0.5){ t.style.left=Math.max(2,xf*100)+"%"; t.style.right="auto"; t.style.transform="translateX(12px)"; }
+  else { t.style.right=Math.max(2,(1-xf)*100)+"%"; t.style.left="auto"; t.style.transform="translateX(-12px)"; }
+  t.style.display="block"; clearTimeout(t._to); if(auto)t._to=setTimeout(()=>{t.style.display="none";},2800); }
+function tipHide(id){ const t=$("#"+id); if(t)t.style.display="none"; }
+function statTip(el,auto){ const t=$("#stattip"),text=el.dataset.tip; if(!t||!text)return; t.textContent=text; const r=el.getBoundingClientRect(); t.style.top=(r.top-8)+"px"; t.style.transform="translate(-50%,-100%)"; t.style.left=(r.left+r.width/2)+"px"; t.style.display="block";
+  const tr=t.getBoundingClientRect(), vw=document.documentElement.clientWidth, m=6; let sh=0;
+  if(tr.left<m) sh=m-tr.left; else if(tr.right>vw-m) sh=(vw-m)-tr.right;
+  if(sh) t.style.left=(r.left+r.width/2+sh)+"px";
+  clearTimeout(t._to); if(auto)t._to=setTimeout(()=>{t.style.display="none";},2800); }
+function statTipHide(){ const t=$("#stattip"); if(t)t.style.display="none"; }
+function chartTipAt(id,html,el,auto){ const t=document.getElementById(id); if(!t||!el)return; t.innerHTML=html; const cont=t.parentElement,cr=cont.getBoundingClientRect(),er=el.getBoundingClientRect(); t.style.display="block"; t.style.top="6px"; t.style.right="auto"; t.style.transform="none"; const tw=t.offsetWidth,sl=cont.scrollLeft||0; let left=(er.left+er.width/2-cr.left)+sl-tw/2; left=Math.max(sl+4,Math.min(sl+cr.width-tw-4,left)); t.style.left=left+"px"; clearTimeout(t._to); if(auto)t._to=setTimeout(()=>{t.style.display="none";},2800); }
+function flowTip(ns,i,auto,el){ const a=window._f&&window._f[ns],d=a&&a[i]; if(!d)return; const html=`<b>${esc(d.date)}</b><br>`+d.txns.map(x=>{const isIn=(+x.in||0)>0; return `${esc(x.note||(isIn?'Deposit':'Withdrawal'))} <span style="color:${isIn?'#9FE1CB':'#F0997B'}">${isIn?'+'+money(x.in):'-'+money(x.out)}</span>`;}).join("<br>"); chartTipAt(ns+'ftip',html,el,auto); }
+function flowTipHide(ns){ tipHide(ns+'ftip'); }
+function growthTip(ns,i,auto,el){ const a=window._g&&window._g[ns],d=a&&a[i]; if(!d)return; chartTipAt(ns+'gtip',d.html,el,auto); }
+function growthTipHide(ns){ tipHide(ns+'gtip'); }
+function monthTip(ns,i,auto,el){ const a=window._m&&window._m[ns],d=a&&a[i]; if(!d)return; chartTipAt(ns+'mtip',d.html,el,auto); }
+function monthTipHide(ns){ tipHide(ns+'mtip'); }
+const emptyChart=(W,H)=>`<svg viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#FAF6F1" rx="8"/><text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="#8E837A">No data yet.</text></svg>`;
+
+/* ---------- confetti ---------- */
+function confettiBurst(){
+  const cols=["#F88378","#FBCEB1","#AFD9AE","#43B3AE"], host=document.createElement("div"); host.className="confetti";
+  for(let i=0;i<70;i++){const s=document.createElement("span"); s.style.left=Math.random()*100+"vw"; s.style.background=cols[i%4]; s.style.animationDelay=(Math.random()*0.4)+"s"; host.appendChild(s);}
+  document.body.appendChild(host); setTimeout(()=>host.remove(),3200);
+}
+function crossInfo(before,after){
+  if(before<1&&after>=1)return{t:1,label:"Goal funded!"};
+  if(before<0.9&&after>=0.9)return{t:0.9,label:"90% there!"};
+  if(before<0.5&&after>=0.5)return{t:0.5,label:"Halfway there!"};
+  return null;
+}
+function celebrate(title,sub){
+  const d=document.createElement("div"); d.className="celebrate"; d.innerHTML=`<div class="big">🎉 ${esc(title)}</div><div class="sub">${esc(sub)}</div>`;
+  document.body.appendChild(d); setTimeout(()=>d.remove(),3700);
+}
+
+/* ---------- settings ---------- */
+function vGoals(){
+  const atLimit=GOAL_LOCK&&state.goals.length>=MAX_GOALS;
+  const rows=state.goals.map(g=>{const c=computeGoal(g); return `
+    <div style="padding:14px 0;border-bottom:1px solid var(--line)">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <input value="${esc(g.name)}" onfocus="this.style.borderColor='var(--line)'" onblur="this.style.borderColor='transparent';updGoal('${g.id}','name',this.value)" style="flex:1;min-width:120px;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink);border:1px solid transparent;background:transparent;padding:4px 6px;border-radius:6px">
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap">${money(c.saved)} of ${money(g.target)} · ${Math.round(c.pct*100)}%</span>
+        <button class="btn ghost" style="padding:5px 11px;font-size:12px" onclick="openGoal('${g.id}')">Open</button>
+        <button class="btn ghost" style="padding:5px 11px;font-size:12px" onclick="deleteGoal('${g.id}')">Delete</button>
+      </div>
+      <div style="display:flex;gap:14px;margin-top:8px;flex-wrap:wrap;align-items:flex-end">
+        <div><span class="ql">Target</span><input type="text" inputmode="decimal" value="${dispMoney(g.target)}" onfocus="rawInput(this)" onblur="fmtInput(this);updGoal('${g.id}','target',this.value)" style="width:110px;padding:6px 8px;border:1px solid var(--line);border-radius:var(--r-sm)"></div>
+        <div><span class="ql">Start</span><input type="date" value="${esc(g.startDate||'')}" onchange="updGoal('${g.id}','startDate',this.value)" style="padding:6px 8px;border:1px solid var(--line);border-radius:var(--r-sm)"></div>
+        <div><span class="ql">Finish by (optional)</span><input type="date" value="${esc(g.targetDate||'')}" onchange="updGoal('${g.id}','targetDate',this.value)" style="padding:6px 8px;border:1px solid var(--line);border-radius:var(--r-sm)"></div>
+      </div>
+    </div>`;}).join("")||`<div class="act"><span class="meta">No goals yet. Add your first one below.</span></div>`;
+  const addArea=atLimit
+    ? `<div style="margin-top:16px;background:#E6F4F3;border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--teal-d)">You're tracking ${MAX_GOALS} goals — the max for this version. <b>Stash Plus</b> unlocks unlimited goals. <button class="btn coral" style="padding:6px 12px;font-size:12px;margin-left:6px" onclick="go('settings')">See Plus</button></div>`
+    : `<div style="margin-top:16px"><button class="btn coral" onclick="goalModal()">＋ New goal</button></div>`;
+  return `<h1 class="viewhead">Goals</h1><p class="viewsub">Create and open your goals. Edits here save automatically.</p>
+  <div class="card" style="max-width:680px;padding-top:2px">${rows}${addArea}</div>`;
+}
+function updGoal(id,field,val){
+  const g=goalById(id); if(!g)return;
+  if(field==="name"){ const t=String(val).trim(); if(!t)return; g.name=t; }
+  else if(field==="target"){ const n=parseFloat(String(val).replace(/[^0-9.\-]/g,""))||0; if(n>0)g.target=n; }
+  else g[field]=val;
+  save(); render();
+}
+function vSettings(){
+  const p=state.profile, v=state.voice;
+  return `
+  <h1 class="viewhead">Settings</h1><p class="viewsub">You, your voice, your goals, your backups.</p>
+
+  <div class="card" style="margin-bottom:18px;max-width:640px"><div class="cardhd">You</div>
+    <div class="row2" style="margin-top:14px">
+      <div class="field"><label>Nickname (what I'll call you)</label><input id="s_nick" value="${esc(p.nickname)}" placeholder="Your nickname"></div>
+      <div class="field"><label>Full Name (First &amp; Middle recommended)</label><input id="s_full" value="${esc(p.fullName)}" placeholder="Your full name"></div>
+    </div>
+    <button class="btn" onclick="saveProfile()">Save</button>
+  </div>
+
+  <div class="card" style="margin-bottom:18px;max-width:640px"><div class="cardhd">Voice</div>
+    <p style="color:var(--muted);font-size:13px;margin:6px 0 12px">One voice for all your goals.</p>
+    <div class="pills" style="margin-bottom:14px">
+      <button class="pill ${v.tier==='sweet'?'on':''}" onclick="setTier('sweet')">Sweet</button>
+      <button class="pill ${v.tier==='sassy'?'on':''}" onclick="setTier('sassy')">Sassy</button>
+      <button class="pill ${v.tier==='roast'?'on':''}" onclick="setTier('roast')">Roast 🔒</button>
+    </div>
+    <p style="color:var(--muted);font-size:12px;margin:0 0 14px">Sweet and Roast banks come in a later build — Sassy is live now. Roast asks you to confirm before switching.</p>
+    <div class="pills">
+      <button class="pill ${v.enabled?'on':''}" onclick="setVoice(true)">Talk-back on</button>
+      <button class="pill ${!v.enabled?'on':''}" onclick="setVoice(false)">Quiet mode</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px;max-width:640px;border:1px solid var(--teal)">
+    <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">✦</span><div class="cardhd">Stash Plus is coming</div></div>
+    <p style="color:var(--muted);font-size:13px;margin:8px 0 10px">This version is a one-time buy that lives on your device. Plus adds the stuff that needs the cloud:</p>
+    <ul style="margin:0 0 12px;padding-left:18px;color:var(--ink);font-size:13px;line-height:1.7">
+      <li><b>Sync across all your devices</b> — phone, tablet, computer, always in step.</li>
+      <li><b>Automatic cloud backup</b> — never lose your progress to a new phone.</li>
+      <li>The <b>Sweet &amp; Roast</b> voices, plus unlimited goals.</li>
+    </ul>
+    <p style="color:var(--teal-d);font-size:12px;margin:0 0 12px"><b>Your goals and history come with you</b> — one tap, nothing to re-enter.</p>
+    <div style="margin-bottom:8px"><textarea id="plus_wish" placeholder="Wishlist: what would make Plus a must-have for you? (optional)" style="width:100%;min-height:62px;padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:13px;color:var(--ink);resize:vertical"></textarea></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="plus_email" type="email" placeholder="you@email.com" style="flex:1;min-width:160px;padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-sm)"><button class="btn coral" onclick="joinWaitlist(this)">Join the waitlist</button></div>
+    <p style="color:var(--muted);font-size:11px;margin:8px 0 0">No charge now — I'll email you when Plus is ready.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:18px;max-width:640px"><div class="cardhd">Your data &amp; backups</div>
+    <div class="warn" style="margin:14px 0"><span class="ico">⚠️</span><div><b>Read this, ${esc(p.nickname||"babe")}.</b> Your data lives only on this device, in this browser. No accounts, nothing stored online. That keeps it private, but a new phone, a deleted app, or clearing browser data will <b>erase everything</b>. Back up regularly, and add it to your home screen.</div></div>
+    <div class="pills">
+      <button class="pill" onclick="exportData()">⬇ Back up (file)</button>
+      <button class="pill" onclick="$('#importFile').click()">⬆ Restore (file)</button>
+      <button class="pill" onclick="exportCSV()">⬇ Export CSV</button>
+    </div>
+    <input type="file" id="importFile" accept="application/json" class="hidden" onchange="importData(event)">
+  </div>
+
+  <div class="card" style="margin-bottom:18px;max-width:640px"><div class="cardhd">Got a suggestion?</div>
+    <p style="color:var(--muted);font-size:13px;margin:6px 0 12px">Tell me what would make Stash better — it comes straight to me. Only what you type here is sent.</p>
+    <div class="field"><label>Your idea</label><textarea id="fb_msg" placeholder="I wish Stash could..." style="width:100%;min-height:84px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:14px;color:var(--ink);resize:vertical"></textarea></div>
+    <div class="field"><label>Your email (optional, only if you'd like a reply)</label><input id="fb_email" type="email" placeholder="you@email.com"></div>
+    <button class="btn coral" onclick="sendFeedback(this)">Send it</button>
+  </div>
+
+  <p style="color:var(--muted);font-size:12px">Stash · a no-download app by Holls Finds Digital</p>
+  <div style="margin-top:30px;padding-top:16px;border-top:1px solid var(--line)"><button class="btn ghost" style="color:var(--coral-d);border-color:#E6C9C2;font-size:13px;padding:9px 16px" onclick="resetAll()">Clear all data</button></div>`;
+}
+function saveProfile(){state.profile.nickname=$("#s_nick").value.trim();state.profile.fullName=$("#s_full").value.trim();save();toast("Saved.");render();}
+function setTier(t){if(t==="roast"){confirmModal("Switch to Roast?","Roast pulls zero punches — heavy language, all in good fun. Sure you want it loud?",()=>{state.voice.tier="roast";save();render();toast("Roast mode on. You asked for it.");});return;}state.voice.tier=t;save();render();}
+function setVoice(on){state.voice.enabled=on;save();render();}
+
+/* ---------- goal CRUD ---------- */
+function goalModal(id){
+  if(!id && GOAL_LOCK && state.goals.length>=MAX_GOALS){ toast("This version tracks up to "+MAX_GOALS+" goals — Stash Plus unlocks unlimited."); go("settings"); return; }
+  const g=id?goalById(id):null, e=g||{};
+  $("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>${g?"Edit goal":"New goal"}</h3>
+    <div class="field"><label>Goal name</label><input id="g_name" value="${esc(e.name||"")}" placeholder="Name your goal"></div>
+    <div class="row2"><div class="field"><label>Target ($)</label><input id="g_target" type="text" inputmode="decimal" value="${e.target?dispMoney(e.target):""}" placeholder="Your target amount" onfocus="rawInput(this)" onblur="fmtInput(this)"></div>
+    <div class="field"><label>Start date</label><input id="g_start" type="date" value="${esc(e.startDate||todayIso())}"></div></div>
+    <div class="field"><label>Target date (optional)</label><input id="g_tdate" type="date" value="${esc(e.targetDate||"")}"></div>
+    <div class="field"><label>My notes (optional)</label><textarea id="g_notes" placeholder="Why it matters, ideas, reminders..." style="width:100%;min-height:70px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:14px;color:var(--ink);resize:vertical">${esc(e.notes||"")}</textarea></div>
+    <div class="acts"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn coral" onclick="saveGoal('${g?g.id:""}')">Save</button></div></div></div>`;
+}
+function saveGoal(id){
+  const name=$("#g_name").value.trim(), target=numVal($("#g_target")), notes=(($("#g_notes")||{}).value||"").trim();
+  if(!name||!target){toast("Give it a name and a target.");return;}
+  if(id){const g=goalById(id);g.name=name;g.target=target;g.startDate=$("#g_start").value||todayIso();g.targetDate=$("#g_tdate").value;g.notes=notes;}
+  else{const ng={id:uid(),name,target,startDate:$("#g_start").value||todayIso(),targetDate:$("#g_tdate").value,notes,deposits:[]};state.goals.push(ng);state.activeGoalId=ng.id;view="home";}
+  save();closeModal();toast(id?"Goal updated.":"Goal added.");render();window.scrollTo(0,0);
+}
+function saveGoalNotes(id){const g=goalById(id),el=$("#goalNotes");if(g&&el){g.notes=el.value;save();}}
+async function sendFeedback(btn){
+  const msg=$("#fb_msg").value.trim(); if(!msg){toast("Type your idea first.");return;}
+  if(!FEEDBACK_KEY){toast("Feedback isn't switched on yet.");return;}
+  btn.disabled=true; const old=btn.textContent; btn.textContent="Sending...";
+  try{
+    const res=await fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({access_key:FEEDBACK_KEY,subject:"Stash app suggestion",from_name:"Stash app",replyto:$("#fb_email").value.trim()||"",message:msg})});
+    const j=await res.json();
+    if(j.success){$("#fb_msg").value="";$("#fb_email").value="";toast("Sent! Thank you, truly.");}
+    else throw 0;
+  }catch(e){toast("Couldn't send right now — check your connection and try again.");}
+  btn.disabled=false; btn.textContent=old;
+}
+async function joinWaitlist(btn){
+  const email=$("#plus_email").value.trim();
+  const wish=(($("#plus_wish")||{}).value||"").trim();
+  if(!email||!/.+@.+\..+/.test(email)){toast("Pop in a valid email first.");return;}
+  if(!FEEDBACK_KEY){toast("The waitlist isn't switched on yet.");return;}
+  btn.disabled=true; const old=btn.textContent; btn.textContent="Joining...";
+  try{
+    const res=await fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({access_key:FEEDBACK_KEY,subject:"Stash Plus waitlist signup",from_name:"Stash app",email,wishlist:wish||"(none)"})});
+    const j=await res.json();
+    if(j.success){$("#plus_email").value="";if($("#plus_wish"))$("#plus_wish").value="";toast("You're on the list! I'll be in touch.");}
+    else throw 0;
+  }catch(e){toast("Couldn't join right now — check your connection and try again.");}
+  btn.disabled=false; btn.textContent=old;
+}
+function deleteGoal(id){confirmModal("Delete this goal?","Every entry in it goes too. Back up first if you're unsure.",()=>{
+  state.goals=state.goals.filter(g=>g.id!==id);
+  if(state.activeGoalId===id)state.activeGoalId=state.goals[0]?state.goals[0].id:null;
+  save(); if(!state.goals.length){view="welcome";} render();});}
+
+/* ---------- edit entry ---------- */
+function editRow(gid,id){
+  const g=goalById(gid), r=g.deposits.find(d=>d.id===id); if(!r)return; const isIn=(+r.in||0)>0; dir=isIn?"in":"out";
+  $("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>Edit entry</h3>
+    <div class="field"><label>Amount</label><input id="e_amt" type="text" inputmode="decimal" value="${isIn?r.in:r.out}"></div>
+    <div class="field"><label>In or out?</label><div class="seg" id="e_dir"><button class="${isIn?'on':''}" data-dir="in" onclick="segPick(this)">Money in</button><button class="${!isIn?'on':''}" data-dir="out" onclick="segPick(this)">Money out</button></div></div>
+    <div class="row2"><div class="field"><label>Date</label><input id="e_date" type="date" value="${esc(r.date)}"></div>
+    <div class="field"><label>Note</label><input id="e_note" value="${esc(r.note||"")}" placeholder="Add a note"></div></div>
+    <div class="acts"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn coral" onclick="saveRow('${gid}','${id}')">Save</button></div></div></div>`;
+}
+function saveRow(gid,id){
+  const g=goalById(gid), r=g.deposits.find(d=>d.id===id), amt=parseFloat($("#e_amt").value)||0;
+  if(amt<=0){toast("Amount must be more than zero.");return;}
+  r.in=dir==="in"?amt:0; r.out=dir==="out"?amt:0; r.date=$("#e_date").value||r.date; r.note=$("#e_note").value.trim();
+  g.deposits.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0); save();closeModal();render();
+}
+
+/* ---------- backup ---------- */
+function exportData(){const blob=new Blob([JSON.stringify({schemaVersion:STASH_SCHEMA,...state},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="stash-backup-"+todayIso()+".json";a.click();if(state.backup){state.backup.lastBackup=Date.now();save();}toast("Backed up. Keep that file safe.");}
+let _silPick;
+function maybeBackupReminder(){
+  const b=state.backup; if(!b||b.silenced)return;
+  const now=Date.now(); if(now<(b.snoozeUntil||0))return;
+  if(!state.goals.some(g=>(g.deposits||[]).length>0))return;
+  if(b.lastBackup && now-b.lastBackup<=14*864e5)return;
+  showBackupReminder();
+}
+function showBackupReminder(){
+  $("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>Time to back up?</h3>
+    <p style="color:#5b524b;font-size:14px;margin:0 0 16px">Your data lives only on this device. A quick backup means a new phone, a deleted app, or cleared browser data won't wipe your progress.</p>
+    <div class="acts" style="flex-wrap:wrap;gap:8px;justify-content:flex-end"><button class="btn ghost" onclick="snoozeBackup(7)">Remind me in a week</button><button class="btn ghost" onclick="silenceBackupFlow()">Stop reminding me</button><button class="btn coral" onclick="exportData();closeModal()">Back up now</button></div>
+  </div></div>`;
+}
+function snoozeBackup(days){ if(state.backup){state.backup.snoozeUntil=Date.now()+days*864e5;save();} closeModal(); }
+function silenceBackupFlow(){
+  _silPick=undefined;
+  $("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>Stop backup reminders?</h3>
+    <p style="color:#5b524b;font-size:14px;margin:0 0 12px">Choose how long. While reminders are off, backing up is on you.</p>
+    <div class="pills" style="margin-bottom:14px"><button class="pill" onclick="setSilencePick(30,this)">For 30 days</button><button class="pill" onclick="setSilencePick(90,this)">For 90 days</button><button class="pill" onclick="setSilencePick(0,this)">Forever</button></div>
+    <label style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:#5b524b;margin-bottom:16px;line-height:1.5"><input type="checkbox" id="silenceAgree" oninput="updSilence()" style="margin-top:3px;flex-shrink:0"><span>I understand my data is only on this device, and if I don't back up, a new phone, a deleted app, or clearing browser data will <b>erase everything</b> — with no way for Stash to recover it.</span></label>
+    <div class="acts"><button class="btn ghost" onclick="showBackupReminder()">Back</button><button class="btn coral" id="silenceBtn" disabled onclick="confirmSilence()">Turn off reminders</button></div>
+  </div></div>`;
+}
+function setSilencePick(days,btn){ _silPick=days; [...btn.parentNode.children].forEach(x=>x.classList.toggle("on",x===btn)); updSilence(); }
+function updSilence(){ const a=$("#silenceAgree"),b=$("#silenceBtn"); if(b)b.disabled=!(a&&a.checked)||_silPick===undefined; }
+function confirmSilence(){ if(!state.backup)return; if(_silPick===0)state.backup.silenced=true; else state.backup.snoozeUntil=Date.now()+_silPick*864e5; save(); closeModal(); toast("Reminders off. Back up sometimes anyway!"); }
+function whatIfPanel(gs){
+  return `<div class="card" style="margin-bottom:12px"><div class="cardhd" style="margin-bottom:4px">What if…</div>
+    <p style="color:var(--muted);font-size:12px;margin:0 0 12px;line-height:1.5">Curious how a weekly habit pays off? Pick a goal and a weekly amount, and I'll tell you the date you'd hit it.</p>
+    <div class="field" style="margin-bottom:9px"><label>For which goal?</label><select id="wio_scope" onchange="whatIfCalc()"><option value="__all__">All goals</option>${gs.map(c=>`<option value="${c.id}">${esc(capFirst(c.gname))}</option>`).join("")}</select></div>
+    <div class="field" style="margin-bottom:9px"><label>If I save this each week</label><input id="wio_week" type="text" inputmode="decimal" placeholder="Per week ($)" oninput="whatIfCalc()" onfocus="rawInput(this)" onblur="fmtInput(this);whatIfCalc()"></div>
+    <p id="wio_out" class="capd">Pick a goal and a weekly amount.</p>
+  </div>`;
+}
+function whatIfCalc(){
+  const out=$("#wio_out"); if(!out)return;
+  const scope=$("#wio_scope")?$("#wio_scope").value:"__all__", wk=numVal($("#wio_week"));
+  let left,name;
+  if(scope==="__all__"){ const gs=state.goals.map(computeGoal); left=gs.reduce((a,c)=>a+c.left,0); name="all your goals"; }
+  else { const g=goalById(scope); if(!g){out.textContent="";return;} const c=computeGoal(g); left=c.left; name=capFirst(c.gname); }
+  if(!wk||wk<=0){out.textContent="Pick a goal and a weekly amount.";return;}
+  if(left<=0){out.textContent=name+" is already funded. Go you.";return;}
+  const weeks=Math.ceil(left/wk), d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+weeks*7);
+  out.textContent=`Saving ${money(wk)}/week, you'll fund ${name} around ${d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})} (${weeks} weeks).`;
+}
+function moveToPlus(){
+  const payload={schemaVersion:STASH_SCHEMA,profile:state.profile,voice:state.voice,goals:state.goals};
+  const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  if(!PLUS_IMPORT_URL){ toast("Plus isn't live yet — your goals and history will come with you when it launches."); return; }
+  if(enc.length>60000){ exportData(); toast("You've got a lot saved — I downloaded a backup file to import into Plus."); return; }
+  location.href=PLUS_IMPORT_URL+"#stash="+enc;
+}
+function exportCSV(){
+  let csv="Goal,Date,Note,Money in,Money out\n";
+  allEntries().slice().reverse().forEach(r=>{csv+=`"${(r.goalName||"").replace(/"/g,'""')}","${r.date}","${(r.note||"").replace(/"/g,'""')}",${r.in||0},${r.out||0}\n`;});
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download="stash-"+todayIso()+".csv";a.click();toast("CSV exported.");
+}
+function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!(d.goals||d.setup))throw 0;state=migrate(d);save();go("home");toast("Restored. Welcome back.");}catch(err){toast("That file didn't look like a Stash backup.");}};r.readAsText(f);e.target.value="";}
+function resetAll(){
+  $("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>Clear everything?</h3>
+    <p style="color:#5b524b;font-size:14px;margin:0 0 14px">This permanently wipes every goal and entry on this device. There's no undo, so back up first if you're not sure.</p>
+    <p style="color:#5b524b;font-size:13px;margin:0 0 8px">Type <b>erase my data</b> below to confirm:</p>
+    <input id="wipeConfirm" placeholder="erase my data" autocomplete="off" oninput="$('#wipeBtn').disabled = this.value.trim().toLowerCase()!=='erase my data'" style="width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);margin-bottom:16px">
+    <div class="acts"><button class="btn ghost" onclick="closeModal()">Never mind</button><button class="btn coral" id="wipeBtn" disabled onclick="doWipe()">Delete forever</button></div>
+  </div></div>`;
+}
+function doWipe(){ state=blank(); save(); view="welcome"; closeModal(); render(); window.scrollTo(0,0); }
+
+/* ---------- onboarding ---------- */
+function vWelcome(){
+  return `<div style="max-width:520px;margin:4vh auto 0">
+    <p style="font-family:var(--serif);font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin:0">Stash</p>
+    <h1 class="viewhead" style="font-size:34px">A savings jar that talks back.</h1>
+    <p class="viewsub">Tell me what you're chasing and I'll cheer you the whole way. No account, no download, it just lives on your device.</p>
+    <div class="card">
+      <div class="field"><label>What are you saving for?</label><input id="w_goal" placeholder="Name your goal"></div>
+      <div class="row2"><div class="field"><label>Target amount ($)</label><input id="w_target" type="text" inputmode="decimal" placeholder="Your target amount" onfocus="rawInput(this)" onblur="fmtInput(this)"></div>
+      <div class="field"><label>What should I call you?</label><input id="w_nick" placeholder="Your nickname"></div></div>
+      <div class="field"><label>Full name <span style="color:var(--muted);font-weight:400">(only used for the sassy over-budget moments)</span></label><input id="w_full" placeholder="First & middle name"></div>
+      <div class="row2"><div class="field"><label>Start date</label><input id="w_start" type="date" value="${todayIso()}"></div>
+      <div class="field"><label>Target date (optional)</label><input id="w_tdate" type="date"></div></div>
+      <button class="btn coral" style="width:100%" onclick="finishSetup()">Start saving</button>
+    </div>
+    <div class="warn" style="margin-top:16px"><span class="ico">⚠️</span><div>Heads up: your data is saved only on this device, with no online account. Add Stash to your home screen and back it up now and then so you never lose your progress.</div></div>
+    <p style="text-align:center;margin-top:16px"><button class="btn ghost" onclick="loadSample()">Just show me a demo first</button></p></div>`;
+}
+function finishSetup(){
+  const t=numVal($("#w_target"))||0;
+  if(!$("#w_goal").value.trim()||!t){toast("Give me a goal and a number to aim at.");return;}
+  state=blank(); state.profile.nickname=$("#w_nick").value.trim(); state.profile.fullName=$("#w_full").value.trim();
+  const ng={id:uid(),name:$("#w_goal").value.trim(),target:t,startDate:$("#w_start").value||todayIso(),targetDate:$("#w_tdate").value,notes:"",deposits:[]};
+  state.goals.push(ng); state.activeGoalId=ng.id; save(); go("home");
+}
+function loadSample(){state=JSON.parse(JSON.stringify(SAMPLE));save();go("home");toast("This is sample data — clear it in Settings to start fresh.");}
+
+/* ---------- modal ---------- */
+function confirmModal(title,body,onYes){$("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>${esc(title)}</h3><p style="color:#5b524b;font-size:14px;margin:0 0 18px">${esc(body)}</p><div class="acts"><button class="btn ghost" onclick="closeModal()">Never mind</button><button class="btn coral" id="mYes">Yes, do it</button></div></div></div>`;$("#mYes").onclick=()=>{closeModal();onYes();};}
+function closeModal(){$("#modalHost").innerHTML="";}
+function closeGoalModal(){ $("#modalHost").innerHTML=""; render(); }
+function openGoalModal(id){
+  const g=goalById(id); if(!g)return; const c=computeGoal(g);
+  const acts=c.deposits.slice().reverse().slice(0,6).map(rowHtml).join("")||`<div class="act"><span class="meta">No entries yet.</span></div>`;
+  $("#modalHost").innerHTML=`<div class="scrim" onclick="if(event.target===this)closeGoalModal()">
+    <div class="modal" style="max-width:860px;width:94vw;max-height:88vh;padding:0;display:flex;flex-direction:column;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-shrink:0;padding:15px 22px;border-bottom:1px solid var(--line)">
+        <h3 style="margin:0">${esc(capFirst(c.gname))}</h3>
+        <button onclick="closeGoalModal()" aria-label="Close" style="border:0;background:transparent;font-size:22px;color:var(--muted);cursor:pointer;line-height:1">✕</button>
+      </div>
+      <div style="overflow-y:auto;padding:18px 22px">
+      <div class="hero" style="margin-bottom:16px">
+        ${heroBar(c.saved,c.target,c.pct,"")}
+        ${voiceOn()?`<div class="talk" style="margin:16px 0 0"><span>${esc(c.special||c.talkback)}</span></div>`:``}
+      </div>
+      <div class="tiles" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-bottom:16px">
+        ${tile(c.nextMile?`${money(c.nextMile.amt)} to ${c.nextMile.pct}%`:"Goal reached!","next milestone","How much more to reach your next 10% mark.")}
+        ${tile(c.projected,"projected finish","When you'll hit this goal at your current saving pace.")}
+        ${tile(c.daysSaving+" days","days saving","Days since this goal's start date.")}
+        ${tile(money(c.biggest),"biggest deposit","Your largest single deposit toward this goal.")}
+        ${tile(money(c.avgIn),"average deposit","The average size of your deposits to this goal.")}
+        ${tile(money(c.left),"left to save","How much more to fully fund this goal.")}
+      </div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-bottom:16px">
+        <div class="card chartcard"><div class="cardhd">Saved over time</div>${chartGrowth(c,"m")}</div>
+        <div class="card chartcard"><div class="cardhd">Money in &amp; out</div>${chartFlow(c,"m")}</div>
+        <div class="card chartcard"><div class="cardhd">By month</div>${chartMonths(c,"m")}</div>
+        <div class="card"><div class="cardhd">What if…</div>${whatIfCard(c)}</div>
+      </div>
+      ${voiceOn()?`<div class="persona" style="margin:0 0 16px"><span class="ico">✦</span><div><b>${esc(c.persona)}</b><span style="font-size:14px">${esc(c.personaBlurb)}</span></div></div>`:``}
+      <div class="card" style="margin-bottom:14px"><div class="cardhd" style="margin-bottom:8px">My notes</div><textarea id="goalNotes" onblur="saveGoalNotes('${g.id}')" placeholder="Jot anything about this goal..." style="width:100%;min-height:70px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:14px;color:var(--ink);resize:vertical;background:#fff">${esc(g.notes||"")}</textarea></div>
+      <div class="card"><div class="cardhd" style="margin-bottom:6px">Recent activity</div>${acts}</div>
+      <div style="margin-top:16px;display:flex;gap:8px"><button class="btn ghost" onclick="goalModal('${g.id}')">Edit goal</button><button class="btn" onclick="closeGoalModal()">Done</button></div>
+      </div>
+    </div>
+  </div>`;
+}
+function openAddModal(){
+  if(!state.goals.length){toast("Add a goal first.");go("settings");return;}
+  $("#modalHost").innerHTML=`<div class="scrim"><div class="modal" style="max-width:460px"><h3>Track Deposit <button onclick="closeModal()" style="float:right;border:0;background:transparent;font-size:18px;color:var(--muted);cursor:pointer">✕</button></h3>${addUnified()}</div></div>`;
+}
+
+/* ---------- SHELL ---------- */
+const navBtn=(id,ico,label)=>`<button class="${view===id||(id==='home'&&view==='goal')?'on':''}" onclick="go('${id}')"><span class="ico">${ico}</span>${label}</button>`;
+function render(){
+  const root=$("#root");
+  if(view==="welcome"||!state.goals.length){view="welcome";root.innerHTML=`<div class="main" style="grid-column:1/-1">${vWelcome()}</div>`;$(".fab")?.classList.add("hidden");return;}
+  $(".fab")?.classList.remove("hidden");
+  let body="";
+  if(view==="home") body = state.goals.length>1 ? vOverview() : vGoal();
+  else if(view==="goal") body=vGoal();
+  else if(view==="add") body=vAdd();
+  else if(view==="activity") body=vActivity();
+  else if(view==="goals") body=vGoals();
+  else if(view==="settings") body=vSettings();
+  else body=state.goals.length>1?vOverview():vGoal();
+  const mobile=window.innerWidth<=860;
+  root.innerHTML=`<div class="app"><aside class="side"><div class="brand">Stash</div>
+    <div style="font-size:11px;opacity:.6;letter-spacing:1px;text-transform:uppercase">Holls Finds Digital</div>
+    <nav class="nav">${navBtn("home","◎","Home")}${navBtn("goals","⚑","Goals")}${navBtn("activity","≣","Activity")}${navBtn("settings","⚙","Settings")}</nav>
+    ${(!mobile&&state.goals.length)?`<div class="sideadd"><div class="cardhd" style="font-size:15px;margin-bottom:10px">Track Deposit</div>${addUnified()}</div>`:""}
+    <button class="plusbtn" onclick="go('settings')">✦ Stash Plus</button>
+    <div class="foot">Your data stays on this device.<br>Back it up in Settings.</div></aside>
+    <main class="main">${body}</main></div>`;
+}
+
+/* ---------- boot ---------- */
+addEventListener("wheel",()=>{const a=document.activeElement;if(a&&a.type==="number")a.blur();},{passive:true});
+let _rz; addEventListener("resize",()=>{clearTimeout(_rz);_rz=setTimeout(()=>render(),200);});
+state=load();
+if(!state){state=blank();view="welcome";}else{view="home";}
+render();
+maybeBackupReminder();
+setInterval(()=>{ if(!$("#modalHost").innerHTML) maybeBackupReminder(); }, 3600000);
+/* ---------- temp auto width diagnostic (shows only on overflow) ---------- */
+(function(){
+  const BUILD="b8";
+  const run=()=>{const cw=document.documentElement.clientWidth,sw=document.documentElement.scrollWidth,over=sw-cw,force=/[?&]diag/.test(location.search);
+    let dz=document.getElementById("__diag");
+    if(over<=1&&!force){ if(dz)dz.remove(); return; }
+    if(!dz){dz=document.createElement("div");dz.id="__diag";dz.style.cssText="position:fixed;top:0;left:0;right:0;z-index:99999;background:#9A3D2C;color:#fff;font:11px/1.35 monospace;padding:8px 10px;max-height:46vh;overflow:auto;white-space:pre-wrap";document.body.appendChild(dz);}
+    let o=[];document.querySelectorAll("body *").forEach(el=>{if(el.id==="__diag")return;const r=el.getBoundingClientRect();if(r.right>cw+0.5||r.left<-0.5)o.push("R"+Math.round(r.right)+" W"+Math.round(r.width)+" "+el.tagName+"."+((el.className&&el.className.toString().slice(0,16))||"")+' "'+((el.innerText||"").replace(/\s+/g," ").slice(0,16))+'"');});
+    o=[...new Set(o)].sort((a,b)=>parseInt(b.slice(1))-parseInt(a.slice(1)));
+    dz.textContent="["+BUILD+(window.navigator.standalone?" HOME":" safari")+"] vw="+cw+" sw="+sw+" OVER="+over+"\n"+(o.length?o.slice(0,9).join("\n"):"(no element past edge)");};
+  setTimeout(run,500);setInterval(run,1200);
+})();
+</script>
+</body>
+</html>
