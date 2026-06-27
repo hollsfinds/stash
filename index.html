@@ -176,7 +176,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
   .stattip{max-width:74vw;font-size:13px}
   .fab{display:flex!important}
 }
-.fab{display:none;position:fixed;right:18px;bottom:74px;width:58px;height:58px;border-radius:50%;background:var(--coral);color:#fff;border:0;font-size:28px;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(248,131,120,.5);z-index:55}
+.fab{display:none;position:fixed;right:18px;bottom:calc(74px + env(safe-area-inset-bottom));width:58px;height:58px;border-radius:50%;background:var(--coral);color:#fff;border:0;font-size:28px;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(248,131,120,.5);z-index:55}
 </style>
 </head>
 <body>
