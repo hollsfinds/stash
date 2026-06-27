@@ -106,7 +106,8 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
 .field input,.field select{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink)}
 .field input:focus,.field select:focus{outline:none;border-color:var(--teal)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:end}
+.row2>.field{min-width:0}
 .btn{background:var(--teal);color:#0c3a37;border:0;border-radius:var(--r-sm);padding:13px 22px;font-size:15px;font-weight:500}
 .btn:hover{filter:brightness(.97)}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
@@ -465,6 +466,14 @@ function combinedGoal(){
     startDate:starts[0]||todayIso(),targetDate:tdates[tdates.length-1]||"",deposits:all};
 }
 function vOverview(){
+  if(!state.goals.length) return `
+  <h1 class="viewhead">Hey ${esc((state.profile.nickname||"").trim()||"there")}.</h1>
+  <p class="viewsub">No goals yet, you're just looking around. Add one whenever you're ready.</p>
+  <div class="card" style="text-align:center;padding:32px 20px;max-width:520px">
+    <div style="font-size:44px;margin-bottom:6px">🫙</div>
+    <p style="color:var(--muted);font-size:14px;margin:0 0 16px;line-height:1.5">Your jar's empty for now. Create a goal to start stashing and unlock the talk-back.</p>
+    <button class="btn coral" onclick="goalModal()">＋ Create your first goal</button>
+  </div>`;
   const gs=state.goals.map(computeGoal);
   const cc=computeGoal(combinedGoal());
   const funded=gs.filter(c=>c.pct>=1).length;
@@ -1118,10 +1127,12 @@ function vWelcome(){
       <button class="btn coral" style="width:100%" onclick="finishSetup()">Start saving</button>
     </div>
     <div class="warn" style="margin-top:16px"><span class="ico">⚠️</span><div>Heads up: your data is saved only on this device, with no online account. Add Stash to your home screen and back it up now and then so you never lose your progress.</div></div>
-    <p style="text-align:center;margin-top:16px"><button class="btn ghost" onclick="loadSample()">Just show me a demo first</button></p></div>`;
+    <p style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn ghost" onclick="loadSample()">Show me a demo first</button><button class="btn ghost" onclick="skipWelcome()">Skip for now, I'll look around</button></p></div>`;
 }
 let _welcomeTier="sassy";
 function welcomeTier(t){_welcomeTier=t;["sweet","sassy","roast"].forEach(x=>{const b=$("#wv_"+x);if(b)b.classList.toggle("on",x===t);});}
+let _skipWelcome=false;
+function skipWelcome(){ _skipWelcome=true; view="home"; render(); }
 function finishSetup(){
   const t=numVal($("#w_target"))||0;
   if(!$("#w_goal").value.trim()||!t){toast("Give me a goal and a number to aim at.");return;}
@@ -1173,7 +1184,7 @@ function openGoalModal(id){
   </div>`;
 }
 function openAddModal(){
-  if(!state.goals.length){toast("Add a goal first.");go("settings");return;}
+  if(!state.goals.length){goalModal();return;}
   $("#modalHost").innerHTML=`<div class="scrim"><div class="modal" style="max-width:460px"><h3>Track Deposit <button onclick="closeModal()" style="float:right;border:0;background:transparent;font-size:18px;color:var(--muted);cursor:pointer">✕</button></h3>${addUnified()}</div></div>`;
 }
 
@@ -1181,7 +1192,7 @@ function openAddModal(){
 const navBtn=(id,ico,label)=>`<button class="${view===id||(id==='home'&&view==='goal')?'on':''}" onclick="go('${id}')"><span class="ico">${ico}</span>${label}</button>`;
 function render(){
   const root=$("#root");
-  if(view==="welcome"||!state.goals.length){view="welcome";root.innerHTML=`<div class="main" style="grid-column:1/-1">${vWelcome()}</div>`;$(".fab")?.classList.add("hidden");return;}
+  if((view==="welcome"||!state.goals.length)&&!_skipWelcome){view="welcome";root.innerHTML=`<div class="main" style="grid-column:1/-1">${vWelcome()}</div>`;$(".fab")?.classList.add("hidden");return;}
   $(".fab")?.classList.remove("hidden");
   let body="";
   if(view==="home") body = state.goals.length>1 ? vOverview() : vGoal();
