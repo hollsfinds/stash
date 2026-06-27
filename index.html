@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Stash, a no-download savings app</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F88378">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Stash">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -909,8 +916,19 @@ function vSettings(){
     <button class="btn coral" onclick="sendFeedback(this)">Send it</button>
   </div>
 
-  <p style="color:var(--muted);font-size:12px">Stash · a no-download app by Holls Finds Digital</p>
+  <p style="color:var(--muted);font-size:12px">Stash · a no-download app by Holls Finds Digital · <a href="#" onclick="showPrivacy();return false" style="color:var(--teal-d);text-decoration:underline">Privacy &amp; data</a></p>
   <div style="margin-top:30px;padding-top:16px;border-top:1px solid var(--line)"><button class="btn ghost" style="color:var(--coral-d);border-color:#E6C9C2;font-size:13px;padding:9px 16px" onclick="resetAll()">Clear all data</button></div>`;
+}
+function showPrivacy(){
+  $("#modalHost").innerHTML=`<div class="scrim" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:520px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0">Privacy &amp; data</h3><button onclick="closeModal()" aria-label="Close" style="border:0;background:transparent;font-size:22px;color:var(--muted);cursor:pointer;line-height:1">✕</button></div>
+    <div style="font-size:14px;color:var(--ink);line-height:1.6">
+      <p style="margin:0 0 10px"><b>Your data stays on your device.</b> Stash has no accounts and no servers. Your goals, deposits, and nickname are saved only in this browser or installed app, on this one device.</p>
+      <p style="margin:0 0 10px"><b>Nothing is sent anywhere,</b> with one exception: if you use the suggestion box or join the Plus waitlist, only what you type there is emailed to me.</p>
+      <p style="margin:0 0 10px"><b>So backing up is on you.</b> A new phone, deleting the app, or clearing browser data will erase everything, with no way for me to recover it. Use <b>Back up</b> in Settings often.</p>
+      <p style="color:var(--muted);font-size:12px;margin:0">The full privacy policy and terms of use are coming at launch.</p>
+    </div>
+    <div class="acts" style="margin-top:16px"><button class="btn coral" onclick="closeModal()">Got it</button></div></div></div>`;
 }
 function saveProfile(){state.profile.nickname=$("#s_nick").value.trim();state.profile.fullName=$("#s_full").value.trim();save();toast("Saved.");render();}
 function setTier(t){if(t==="roast"){confirmModal("Switch to Roast?","Roast pulls zero punches, heavy language, all in good fun. Sure you want it loud?",()=>{state.voice.tier="roast";save();render();toast("Roast mode on. You asked for it.");});return;}state.voice.tier=t;save();render();}
@@ -1161,18 +1179,8 @@ if(!state){state=blank();view="welcome";}else{view="home";}
 render();
 maybeBackupReminder();
 setInterval(()=>{ if(!$("#modalHost").innerHTML) maybeBackupReminder(); }, 3600000);
-/* ---------- temp auto width diagnostic (shows only on overflow) ---------- */
-(function(){
-  const BUILD="b8";
-  const run=()=>{const cw=document.documentElement.clientWidth,sw=document.documentElement.scrollWidth,over=sw-cw,force=/[?&]diag/.test(location.search);
-    let dz=document.getElementById("__diag");
-    if(over<=1&&!force){ if(dz)dz.remove(); return; }
-    if(!dz){dz=document.createElement("div");dz.id="__diag";dz.style.cssText="position:fixed;top:0;left:0;right:0;z-index:99999;background:#9A3D2C;color:#fff;font:11px/1.35 monospace;padding:8px 10px;max-height:46vh;overflow:auto;white-space:pre-wrap";document.body.appendChild(dz);}
-    let o=[];document.querySelectorAll("body *").forEach(el=>{if(el.id==="__diag")return;const r=el.getBoundingClientRect();if(r.right>cw+0.5||r.left<-0.5)o.push("R"+Math.round(r.right)+" W"+Math.round(r.width)+" "+el.tagName+"."+((el.className&&el.className.toString().slice(0,16))||"")+' "'+((el.innerText||"").replace(/\s+/g," ").slice(0,16))+'"');});
-    o=[...new Set(o)].sort((a,b)=>parseInt(b.slice(1))-parseInt(a.slice(1)));
-    dz.textContent="["+BUILD+(window.navigator.standalone?" HOME":" safari")+"] vw="+cw+" sw="+sw+" OVER="+over+"\n"+(o.length?o.slice(0,9).join("\n"):"(no element past edge)");};
-  setTimeout(run,500);setInterval(run,1200);
-})();
+/* ---------- service worker (network-first; keeps the app updatable + offline) ---------- */
+if("serviceWorker" in navigator){ window.addEventListener("load",()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }); }
 </script>
 </body>
 </html>
