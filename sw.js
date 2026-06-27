@@ -1,6 +1,6 @@
 /* Stash service worker — network-first for the app so updates ALWAYS reach users,
    cache as offline fallback. Bump CACHE to force-clear old static assets. */
-const CACHE = 'stash-v1';
+const CACHE = 'stash-v2';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-180.png'];
 
 self.addEventListener('install', e => {
