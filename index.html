@@ -843,8 +843,10 @@ function vGoals(){
   const rows=state.goals.map(g=>{const c=computeGoal(g); return `
     <div style="padding:13px 0;border-bottom:1px solid var(--line)">
       <div style="display:flex;align-items:center;gap:8px">
-        <input value="${esc(g.name)}" placeholder="Goal name" onblur="updGoal('${g.id}','name',this.value)" style="flex:1;min-width:0;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink);border:1px solid var(--line);background:#fff;padding:7px 32px 7px 10px;border-radius:var(--r-sm)">
-        <span style="margin-left:-30px;color:var(--muted);font-size:13px;pointer-events:none">✎</span>
+        <div style="position:relative;flex:1;min-width:0">
+          <input value="${esc(g.name)}" placeholder="Goal name" onblur="updGoal('${g.id}','name',this.value)" style="width:100%;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink);border:1px solid var(--line);background:#fff;padding:7px 30px 7px 10px;border-radius:var(--r-sm)">
+          <span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none">✎</span>
+        </div>
         <button class="btn ghost" style="padding:7px 14px;font-size:13px;flex-shrink:0" onclick="openGoal('${g.id}')">Open</button>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px">
@@ -1133,7 +1135,7 @@ function loadSample(){state=JSON.parse(JSON.stringify(SAMPLE));save();go("home")
 
 /* ---------- modal ---------- */
 function confirmModal(title,body,onYes){$("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>${esc(title)}</h3><p style="color:#5b524b;font-size:14px;margin:0 0 18px">${esc(body)}</p><div class="acts"><button class="btn ghost" onclick="closeModal()">Never mind</button><button class="btn coral" id="mYes">Yes, do it</button></div></div></div>`;$("#mYes").onclick=()=>{closeModal();onYes();};}
-function closeModal(){ try{document.activeElement&&document.activeElement.blur();}catch(e){} $("#modalHost").innerHTML=""; }
+function closeModal(){ try{document.activeElement&&document.activeElement.blur();}catch(e){} $("#modalHost").innerHTML=""; setTimeout(()=>{try{window.scrollTo(0,0);}catch(e){}},60); }
 function closeGoalModal(){ $("#modalHost").innerHTML=""; render(); }
 function openGoalModal(id){
   const g=goalById(id); if(!g)return; const c=computeGoal(g);
@@ -1204,6 +1206,8 @@ function render(){
 addEventListener("wheel",()=>{const a=document.activeElement;if(a&&a.type==="number")a.blur();},{passive:true});
 let _rz; addEventListener("resize",()=>{clearTimeout(_rz);_rz=setTimeout(()=>render(),200);});
 try{ if(navigator.standalone===true || (window.matchMedia&&matchMedia("(display-mode: standalone)").matches)) document.documentElement.classList.add("standalone"); }catch(e){}
+/* when the keyboard closes, iOS can leave the locked page shoved up under the notch; snap it back */
+document.addEventListener("focusout",()=>{ setTimeout(()=>{ const a=document.activeElement; if(!a || !/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)){ try{window.scrollTo(0,0);}catch(e){} } },80); });
 state=load();
 if(!state){state=blank();view="welcome";}else{view="home";}
 render();
