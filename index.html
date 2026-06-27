@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Stash — a no-download savings app</title>
+<title>Stash, a no-download savings app</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -179,7 +179,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 
 <script>
 /* ============================================================
-   STASH — single-file multi-goal savings PWA (Sassy tier)
+   STASH, single-file multi-goal savings PWA (Sassy tier)
    Talk-back engine ported verbatim from the Sassy Google Sheet.
    ============================================================ */
 
@@ -217,6 +217,70 @@ const COMBINED_TALK=[
 "Your whole lineup is climbing, {name}. Proud of you!"
 ];
 
+/* ---------- SWEET (Gentle) ---------- */
+const SWEET_MILE={
+0:["Day one, {name}. Starting is the bravest part, and you just did it.","Every journey starts with a single deposit, {name}. Welcome to yours.","The jar is open, {name}. You are exactly where you need to be.","First deposit in, {name}. I am so proud of you for beginning.","You started, {name}. That matters more than you know."],
+10:["10% already, {name}. Little by little adds up to a lot.","You are 10% of the way to {goal}, {name}. Lovely start.","10% saved, {name}. {left} to go, and you are building a beautiful habit.","Double digits, {name}. Gentle, steady progress is still progress.","10% in, {name}. Keep being kind to your future self."],
+20:["20%, {name}. You are finding your rhythm, and it shows.","One fifth of the way to {goal}, {name}. Wonderful.","20% saved, {name}. Every deposit is a small act of self-care.","20%, {name}. {left} left, and you are doing just fine.","A steady 20%, {name}. The habit is taking root."],
+30:["30%, {name}. Look how far a little consistency carries you.","Almost a third of the way to {goal}, {name}. Beautifully done.","30% saved, {name}. You are doing something kind for tomorrow.","30%, {name}. {left} to go, one gentle step at a time.","30% in, {name}. Future you is smiling."],
+40:["40%, {name}. Nearly halfway, and so steady.","40% toward {goal}, {name}. You are doing wonderfully.","Almost halfway, {name}. Be proud of every dollar.","40% saved, {name}. {left} left, and you have got this.","40%, {name}. The jar is filling, and so is your confidence."],
+50:["Halfway there, {name}. 50% to {goal}, take a moment to feel that.","50%, {name}. The hardest part is behind you now.","Halfway home, {name}. Look how capable you are.","50% saved, {name}. {left} to go, and you are right on track.","Halfway, {name}. You should be so proud."],
+60:["60%, {name}. More done than not, and steadily growing.","Past halfway, {name}. {goal} is getting closer every day.","60% in, {name}. Your patience is paying off.","60%, {name}. Only {left} left, gently does it.","60% saved, {name}. Keep trusting the process."],
+70:["70%, {name}. The finish is in sight, and you are so steady.","70% toward {goal}, {name}. Almost there, sweet thing.","Almost there, {name}. 70% and still going strong.","70% saved, {name}. {left} left, you are doing beautifully.","70%, {name}. Look how far your kindness to yourself has gone."],
+80:["80%, {name}. So close now, keep being gentle and consistent.","80% to {goal}, {name}. The last stretch is the sweetest.","Only 20% left, {name}. You have done the hard part.","80% saved, {name}. {left} to go, the finish is right there.","80%, {name}. Almost home, and so well done."],
+90:["90%, {name}. One soft push and {goal} is yours.","90% there, {name}. You are nearly home.","So close, {name}. 90% and counting, steady on.","90% saved, {name}. Just {left} left, you have got this.","90%, {name}. Take a breath, then finish strong."],
+100:["You did it, {name}. {goal} is fully funded, and you should be so proud.","100%, {name}. Every gentle deposit added up to this. Beautiful.","{goal} is funded, {name}. Take a moment to celebrate yourself.","Goal reached, {name}. Your consistency made this happen.","Done, {name}. {goal} is yours. I am so happy for you."]
+};
+const SWEET_REACT={
+"deposit|big":["{amt} in one go, {name}. What a wonderful gift to yourself.","{amt}, {name}. That is a big, beautiful step forward.","A lovely {amt} deposit, {name}. Well done, truly.","{amt} added, {name}. Your future self thanks you.","{amt} in, {name}. So generous to your goals, I love it."],
+"deposit|mid":["{amt} saved, {name}. Steady and lovely.","Another {amt}, {name}. Your habit is blooming.","{amt} in, {name}. Every bit matters, and this one does too.","Nice {amt}, {name}. You are right on track.","{amt} logged, {name}. Quietly, kindly building."],
+"deposit|small":["{amt}, {name}. Small deposits are still real progress.","Every dollar counts, {name}. {amt} moved you forward.","{amt} in, {name}. No amount is too small to matter.","{amt} added, {name}. Gentle and steady wins.","{amt}, {name}. Little drops fill the jar."],
+"withdrawal":["{amt} back out, {name}. Life happens, and that is okay.","Took out {amt}, {name}. Be kind to yourself, refill when you can.","{amt} withdrawn, {name}. No guilt here, you are doing your best.","Pulled {amt}, {name}. The jar will be here when you are ready.","Out goes {amt}, {name}. One step back is still okay."]
+};
+const SWEET_PERSONA={
+"The Slow & Steady Saver":["You are Slow and Steady, {name}. Consistency is a quiet superpower.","Steady as can be, {name}. Same gentle effort every time.","The tortoise, {name}, and the tortoise always gets there.","Reliable deposits, {name}. Calm and steady, just lovely.","You show up, {name}. That is the whole secret."],
+"The Sprinter":["You are a Sprinter, {name}. Big, bold steps when you commit.","Go big when it counts, {name}. I admire that.","Few moves, mighty ones, {name}. Lovely energy.","You leap when you are ready, {name}. Beautiful drive.","Big-hearted saver, {name}. When you commit, you really commit."],
+"The Sporadic Saver":["You are a Sporadic saver, {name}. Whenever you can is perfectly fine.","A little here and there, {name}. It still adds up, beautifully.","The Sporadic Saver, {name}. Gentle and no pressure, you show up.","No set pattern, {name}, and that is okay. You are doing great.","Free spirit, {name}. Maybe a soft reminder could help, only if you like."],
+"Just getting started":["Fresh start, {name}. Add a deposit and we will get to know your style.","Too early to tell, {name}. Feed the jar and we will see.","Blank slate, {name}. Let us discover your saving style together.","No data yet, {name}. Add a deposit whenever you are ready.","Just beginning, {name}. The best part is ahead."]
+};
+const SWEET_COMBINED=["Every goal is growing, {name}. Steady and lovely.","All your goals moving at once, {name}. Beautifully done.","You are tending each goal with care, {name}. It shows.","Every jar is filling, {name}. Gentle, steady progress.","Your whole lineup is climbing, {name}. So proud of you."];
+
+/* ---------- ROAST (Brutally Honest) ---------- */
+const ROAST_MILE={
+0:["Zero dollars, {name}. Bold of you to even open this. Now feed it.","Day one, {name}. The jar is empty and so are your excuses. Go.","You started, {name}. Took you long enough. Now do not quit.","First deposit or it did not happen, {name}. Move.","The jar is open and judging you, {name}. Fill the thing."],
+10:["10%, {name}. Cute. Wake me when it is real money.","Double digits, {name}. Do not throw a parade for 10%.","10% in, {name}. {left} to go, so quit stalling.","10%, {name}. A start is not a finish, keep stacking.","10%, {name}. The jar is barely awake. More."],
+20:["20%, {name}. Okay, you are not totally hopeless.","One fifth, {name}. {goal} is not impressed yet, and neither am I.","20% saved, {name}. Decent. Do not get cocky.","20%, {name}. {left} left, so keep your wallet shut.","20%, {name}. Fine. Now do it again."],
+30:["30%, {name}. Past the embarrassing zone, barely.","Almost a third, {name}. Stop celebrating and keep going.","30% in, {name}. Not bad. Not done. Move.","30%, {name}. {left} to go, no spending sprees, you.","30%, {name}. The jar wants more and so do I."],
+40:["40%, {name}. Nearly halfway and still no excuses, good.","40%, {name}. Do not you dare slow down now.","Almost halfway, {name}. This is not the time to get comfy.","40% saved, {name}. {left} left, eyes on the prize.","40%, {name}. The jar is heavier than your willpower used to be."],
+50:["Halfway, {name}. 50%. Okay, NOW I am mildly impressed.","50%, {name}. Downhill from here, so do not faceplant.","Halfway home, {name}. Quit patting yourself and keep going.","50% saved, {name}. {left} to go. No, you cannot buy that thing.","Halfway, {name}. Closer to {goal} than to broke. Finally."],
+60:["60%, {name}. More done than not. Do not get lazy now.","Past halfway, {name}. {goal} is close. Behave.","60% in, {name}. Keep the momentum going.","60%, {name}. Only {left} left. Blink and I will know.","60%, {name}. The jar is carrying you. Carry it back."],
+70:["70%, {name}. The end is in sight. Do not blow it now.","70%, {name}. So close. Terrible time to get stupid with money.","Almost there, {name}. 70%. Keep your hand out of the jar.","70% saved, {name}. {left} left. Finish what you started, for once.","70%, {name}. You basically won. Do not lose on purpose."],
+80:["80%, {name}. Do NOT stop now or I will be insufferable about it.","80%, {name}. The last stretch. No victory laps yet.","Only 20% left, {name}. Do not get comfortable, get done.","80% saved, {name}. {left} to go. The finish is right there, move.","80%, {name}. Smell that? Victory. Do not trip at the line."],
+90:["90%, {name}. One more push. Quit at 90 and we are not friends.","90%, {name}. Do not you DARE stop at the one yard line.","So close it is annoying, {name}. 90%. Finish it.","90% saved, {name}. Just {left} left. Go. Now. Stop reading this.","90%, {name}. This is the sprint. Do not jog."],
+100:["GOAL HIT, {name}. Holy hell, you actually did it. Shocked, honestly.","{goal}: FUNDED, {name}. Look at you, not broke for once. Proud, damn it.","100%, {name}. You did the thing. I take back 30% of my doubts.","Done, {name}. {goal} fully funded. Okay, that was kind of legendary.","Funded, {name}. You crushed it. Now do not blow it all in a weekend."]
+};
+const ROAST_REACT={
+"deposit|big":["{amt}? Okay {name}, big spender in reverse. Respect.","{amt} in one shot, {name}? Who are you and what did you do with broke {name}?","{amt}, {name}. Now THAT is a deposit. Do it again.","Massive, {name}. {amt} straight in. Do not pull it back out, gremlin.","{amt} at once, {name}? The jar nearly fainted. Good."],
+"deposit|mid":["{amt} in, {name}. Fine. Acceptable. Keep going.","Another {amt}, {name}. Steady. Boring. Effective. I will allow it.","{amt} logged, {name}. Not bad. Not enough. More.","{amt} closer, {name}. Do not stop to admire it.","{amt} in the jar, {name}. Quietly not broke. Love that for you."],
+"deposit|small":["{amt}? {name}, I have found couch change worth more. But fine, it counts.","Small, {name}, but {amt} is {amt}. The jar is not picky, unlike me.","{amt} in, {name}. Baby steps. Tiny, tiny baby steps.","{amt}, {name}. Cute. Now do that ten more times.","{amt} added, {name}. Little drops, big jar, slow saver. Keep going."],
+"withdrawal":["Raiding the jar for {amt}, {name}? Bold. Put it back, {fullname}.","{amt} back OUT, {name}? We were doing so well. Sigh.","Pulled {amt}, {name}. The jar remembers this betrayal.","{amt} withdrawal, {name}? That sofa will NOT buy itself, genius.","Out goes {amt}, {name}. I am writing this down. Refill it."]
+};
+const ROAST_PERSONA={
+"The Slow & Steady Saver":["Slow and Steady, {name}. Boring as anything, works every time. Respect.","Same deposit every time, {name}? Predictable. Effective. Fine.","The tortoise, {name}. Slow. Annoying. Wins anyway.","Reliable, {name}. You are basically a savings robot. Good.","You show up every time, {name}. Shockingly consistent. Keep it."],
+"The Sprinter":["A Sprinter, {name}. Big bursts, then you vanish. Classic.","Go big or go home, huh {name}? Just do not go home for too long.","Few moves, big ones, {name}. Dramatic. It works. Whatever.","You pounce, {name}, then disappear. Pounce more, ghost less.","Big-swing saver, {name}. When you commit you commit. So commit MORE."],
+"The Sporadic Saver":["Sporadic, {name}? Translation: you save when you remember, which is rarely.","A little whenever, {name}. Chaotic. Set a reminder, you menace.","The Sporadic Saver, {name}. No pattern, no plan, pure vibes. Risky.","Random deposits, {name}. The jar never knows when you will show. Fix that.","Free spirit, {name}? Free spirits stay broke. Get a schedule."],
+"Just getting started":["No data, {name}. Add a deposit so I can properly judge you.","Too early to roast, {name}. Feed the jar and give me material.","Blank slate, {name}. Let us see if you are all talk.","Nothing yet, {name}. Prove you are not just here for the vibes.","Just starting, {name}. The roast warms up once you actually save."]
+};
+const ROAST_COMBINED=["Every goal moving at once, {name}? Look at you, functional adult.","All your goals stacking, {name}. Did not think you had it in you. Proud.","Juggling goals AND not dropping them, {name}? Miracles happen.","Every jar getting fed, {name}. Quietly not broke. Keep it up.","Whole lineup climbing, {name}. Okay fine, I am impressed. Do not let it go to your head."];
+
+/* ---------- TIER ROUTER ---------- */
+const BANKS={
+  sassy:{M:MILESTONE,R:REACTION,P:PERSONA,C:COMBINED_TALK,S:{full:"GOAL HIT, {name}! Pop the bubbly, you absolute legend.",p90:"90%, {name}. One more push, do NOT stop now!",half:"Halfway, {name}. It is all downhill from here, babe!"},F:"Log your first deposit, {name}!"},
+  sweet:{M:SWEET_MILE,R:SWEET_REACT,P:SWEET_PERSONA,C:SWEET_COMBINED,S:{full:"You did it, {name}. {goal} is fully funded. Celebrate yourself.",p90:"90%, {name}. One gentle push and you are home.",half:"Halfway, {name}. The hardest part is behind you."},F:"Add your first deposit, {name}, and we will begin together."},
+  roast:{M:ROAST_MILE,R:ROAST_REACT,P:ROAST_PERSONA,C:ROAST_COMBINED,S:{full:"GOAL HIT, {name}. You actually did it. Shocked and proud, do not let it go to your head.",p90:"90%, {name}. Quit now and I will never let you live it down. PUSH.",half:"Halfway, {name}. Downhill now. Do not faceplant at the finish."},F:"Log a deposit, {name}. The jar is empty and so is my patience."}
+};
+const curBank=()=>BANKS[state&&state.voice&&state.voice.tier]||BANKS.sassy;
+
 /* ---------- ENGINE ---------- */
 const PHI=0.6180339887, DAY=86400000;
 const frac=x=>x-Math.floor(x);
@@ -248,20 +312,21 @@ function computeGoal(goal){
   const fullName=state.profile.fullName?.trim()||name;
   const gname=goal.name?.trim()||"your goal";
   const ctx={name,fullName,goal:gname,left,pct,amt:0};
+  const B=curBank();
 
-  const talkback=tokens(MILESTONE[bucket][pickIdx(saved,7)],ctx);
+  const talkback=tokens(B.M[bucket][pickIdx(saved,7)],ctx);
   let reaction;
-  if(lastType==="none")reaction="Log your first deposit, "+name+"!";
-  else{const key=lastType==="withdrawal"?"withdrawal":"deposit|"+sizeTier; reaction=tokens(REACTION[key][pickIdx(saved,3)],{...ctx,amt:lastType==="withdrawal"?lastOut:lastIn});}
-  const personaBlurb=tokens(PERSONA[persona][pickIdx(saved,5)],ctx);
-  let special=""; if(pct>=1)special="GOAL HIT, "+name+"! Pop the bubbly, you absolute legend."; else if(pct>=0.9)special="90%, "+name+". One more push, do NOT stop now!"; else if(pct>=0.45&&pct<0.55)special="Halfway, "+name+". It is all downhill from here, babe!";
+  if(lastType==="none")reaction=tokens(B.F,ctx);
+  else{const key=lastType==="withdrawal"?"withdrawal":"deposit|"+sizeTier; reaction=tokens(B.R[key][pickIdx(saved,3)],{...ctx,amt:lastType==="withdrawal"?lastOut:lastIn});}
+  const personaBlurb=tokens(B.P[persona][pickIdx(saved,5)],ctx);
+  let special=""; if(pct>=1)special=tokens(B.S.full,ctx); else if(pct>=0.9)special=tokens(B.S.p90,ctx); else if(pct>=0.45&&pct<0.55)special=tokens(B.S.half,ctx);
 
   const biggest=posIns.length?Math.max(...posIns):0;
   const today=new Date(); today.setHours(0,0,0,0); const todayMs=today.getTime();
   const startMs=goal.startDate?dateMs(goal.startDate):(d.length?dateMs(d[0].date):todayMs);
   const daysSaving=Math.max(Math.round((todayMs-startMs)/DAY),0);
   const targetMs=goal.targetDate?dateMs(goal.targetDate):null;
-  let projected="—", projMs=null;
+  let projected="Not yet", projMs=null;
   if(saved>=target&&target>0)projected="Done!";
   else if(count>=2&&daysSaving>0&&saved>0){const rate=saved/daysSaving; if(rate>0){const need=Math.ceil(left/rate); projMs=todayMs+need*DAY; projected="About "+new Date(projMs).toLocaleDateString("en-US",{month:"short",day:"numeric"});}}
   let nextMile=null; if(pct<1){const nb=Math.min(bucket+10,100); nextMile={amt:Math.max(target*nb/100-saved,0),pct:nb};}
@@ -278,7 +343,7 @@ const GOAL_LOCK=false; /* keep false for now (no cap). Flip to true when Stash P
 const FEEDBACK_KEY=""; /* paste your free Web3Forms access key here (from web3forms.com) to turn on feedback emails */
 const STASH_SCHEMA=1; /* bump if the data shape changes, so Plus can migrate old exports */
 const PLUS_IMPORT_URL=""; /* when Stash Plus (Lovable) is live, set its import URL here.
-  UPGRADE CONTRACT — Plus reads the handoff at:  <PLUS_IMPORT_URL>#stash=<base64url(JSON)>
+  UPGRADE CONTRACT, Plus reads the handoff at:  <PLUS_IMPORT_URL>#stash=<base64url(JSON)>
   decoded JSON = { schemaVersion, profile:{nickname,fullName}, voice:{tier,enabled}, goals:[{id,name,target,startDate,targetDate,notes,deposits:[{id,date,note,in,out}]}] }
   Plus should base64-decode the #stash fragment on load and import it; also accept the same shape via JSON file upload. */
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -317,7 +382,7 @@ function migrate(s){
   return s;
 }
 function load(){try{const r=localStorage.getItem(KEY);return r?migrate(JSON.parse(r)):null;}catch(e){return null;}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){alert("Could not save — your browser may be blocking storage.");}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){alert("Could not save, your browser may be blocking storage.");}}
 
 /* ---------- helpers ---------- */
 const $=(s,el=document)=>el.querySelector(s);
@@ -411,7 +476,7 @@ function vOverview(){
           ${mini(money(cc.avgIn),"average deposit","The average size of your money-in deposits.")}
           ${mini(cc.daysSaving+" days","days saving","Days since your earliest goal's start date.")}
         </div>
-        ${voiceOn()?`<div class="talk" style="margin:16px 0 0"><span>${esc(cc.special||tokens(COMBINED_TALK[pickIdx(cc.saved,7)],{name:cc.name,fullName:cc.name,goal:"your goals",left:cc.left,pct:cc.pct}))}</span></div>`:``}
+        ${voiceOn()?`<div class="talk" style="margin:16px 0 0"><span>${esc(cc.special||tokens(curBank().C[pickIdx(cc.saved,7)],{name:cc.name,fullName:cc.name,goal:"your goals",left:cc.left,pct:cc.pct}))}</span></div>`:``}
       </div>
       <div class="chgrid">
         <div class="card chartcard"><div class="cardhd">Saved over time · all goals</div>${chartGrowth(cc)}</div>
@@ -465,7 +530,7 @@ function vGoal(){
   ${voiceOn()?`<div class="persona"><span class="ico">✦</span><div><b>${esc(c.persona)}</b><span style="font-size:14px">${esc(c.personaBlurb)}</span></div></div>`:``}
 
   <div class="card" style="margin-top:18px"><div class="cardhd" style="margin-bottom:8px">My notes</div>
-    <textarea id="goalNotes" placeholder="Jot anything about this goal — why it matters, ideas, reminders..." onblur="saveGoalNotes('${g.id}')" style="width:100%;min-height:90px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:14px;color:var(--ink);resize:vertical;background:#fff">${esc(g.notes||"")}</textarea>
+    <textarea id="goalNotes" placeholder="Jot anything about this goal, why it matters, ideas, reminders..." onblur="saveGoalNotes('${g.id}')" style="width:100%;min-height:90px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:14px;color:var(--ink);resize:vertical;background:#fff">${esc(g.notes||"")}</textarea>
   </div>
 
   <div class="card" style="margin-top:18px">
@@ -633,7 +698,7 @@ function chartGrowth(c,ns=""){
   const firstMs=Math.min(c.startMs||dateMs(deps[0].date),dateMs(deps[0].date)), endMs=Math.max(dateMs(deps[deps.length-1].date),c.todayMs);
   const startLab=new Date(firstMs).toLocaleDateString("en-US",{month:"short",day:"numeric"}), endLab=new Date(endMs).toLocaleDateString("en-US",{month:"short",day:"numeric"});
   let status;
-  if(c.pct>=1) status="Funded — every dollar is in.";
+  if(c.pct>=1) status="Funded, every dollar is in.";
   else if(c.projMs){ const proj=new Date(c.projMs).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); status=`On pace to finish around ${proj}.`; }
   else { const need=Math.max(2-c.count,0); status=need>0?`Add ${need} more deposit${need>1?'s':''} and I'll forecast your finish.`:"Save again in a few days and I'll forecast your finish."; }
   return `<div style="flex:1;display:flex;flex-direction:column;margin-top:6px">
@@ -774,7 +839,7 @@ function vGoals(){
       </div>
     </div>`;}).join("")||`<div class="act"><span class="meta">No goals yet. Add your first one below.</span></div>`;
   const addArea=atLimit
-    ? `<div style="margin-top:16px;background:#E6F4F3;border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--teal-d)">You're tracking ${MAX_GOALS} goals — the max for this version. <b>Stash Plus</b> unlocks unlimited goals. <button class="btn coral" style="padding:6px 12px;font-size:12px;margin-left:6px" onclick="go('settings')">See Plus</button></div>`
+    ? `<div style="margin-top:16px;background:#E6F4F3;border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--teal-d)">You're tracking ${MAX_GOALS} goals, the max for this version. <b>Stash Plus</b> unlocks unlimited goals. <button class="btn coral" style="padding:6px 12px;font-size:12px;margin-left:6px" onclick="go('settings')">See Plus</button></div>`
     : `<div style="margin-top:16px"><button class="btn coral" onclick="goalModal()">＋ New goal</button></div>`;
   return `<h1 class="viewhead">Goals</h1><p class="viewsub">Create and open your goals. Edits here save automatically.</p>
   <div class="card" style="max-width:680px;padding-top:2px">${rows}${addArea}</div>`;
@@ -806,7 +871,7 @@ function vSettings(){
       <button class="pill ${v.tier==='sassy'?'on':''}" onclick="setTier('sassy')">Sassy</button>
       <button class="pill ${v.tier==='roast'?'on':''}" onclick="setTier('roast')">Roast 🔒</button>
     </div>
-    <p style="color:var(--muted);font-size:12px;margin:0 0 14px">Sweet and Roast banks come in a later build — Sassy is live now. Roast asks you to confirm before switching.</p>
+    <p style="color:var(--muted);font-size:12px;margin:0 0 14px">All three voices are live. Sweet is gentle and encouraging, Sassy is your real-talk bestie, Roast pulls no punches. Roast asks you to confirm first.</p>
     <div class="pills">
       <button class="pill ${v.enabled?'on':''}" onclick="setVoice(true)">Talk-back on</button>
       <button class="pill ${!v.enabled?'on':''}" onclick="setVoice(false)">Quiet mode</button>
@@ -817,14 +882,14 @@ function vSettings(){
     <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">✦</span><div class="cardhd">Stash Plus is coming</div></div>
     <p style="color:var(--muted);font-size:13px;margin:8px 0 10px">This version is a one-time buy that lives on your device. Plus adds the stuff that needs the cloud:</p>
     <ul style="margin:0 0 12px;padding-left:18px;color:var(--ink);font-size:13px;line-height:1.7">
-      <li><b>Sync across all your devices</b> — phone, tablet, computer, always in step.</li>
-      <li><b>Automatic cloud backup</b> — never lose your progress to a new phone.</li>
+      <li><b>Sync across all your devices</b>, phone, tablet, computer, always in step.</li>
+      <li><b>Automatic cloud backup</b>, never lose your progress to a new phone.</li>
       <li>The <b>Sweet &amp; Roast</b> voices, plus unlimited goals.</li>
     </ul>
-    <p style="color:var(--teal-d);font-size:12px;margin:0 0 12px"><b>Your goals and history come with you</b> — one tap, nothing to re-enter.</p>
+    <p style="color:var(--teal-d);font-size:12px;margin:0 0 12px"><b>Your goals and history come with you</b>, one tap, nothing to re-enter.</p>
     <div style="margin-bottom:8px"><textarea id="plus_wish" placeholder="Wishlist: what would make Plus a must-have for you? (optional)" style="width:100%;min-height:62px;padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:13px;color:var(--ink);resize:vertical"></textarea></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="plus_email" type="email" placeholder="you@email.com" style="flex:1;min-width:160px;padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-sm)"><button class="btn coral" onclick="joinWaitlist(this)">Join the waitlist</button></div>
-    <p style="color:var(--muted);font-size:11px;margin:8px 0 0">No charge now — I'll email you when Plus is ready.</p>
+    <p style="color:var(--muted);font-size:11px;margin:8px 0 0">No charge now, I'll email you when Plus is ready.</p>
   </div>
 
   <div class="card" style="margin-bottom:18px;max-width:640px"><div class="cardhd">Your data &amp; backups</div>
@@ -838,7 +903,7 @@ function vSettings(){
   </div>
 
   <div class="card" style="margin-bottom:18px;max-width:640px"><div class="cardhd">Got a suggestion?</div>
-    <p style="color:var(--muted);font-size:13px;margin:6px 0 12px">Tell me what would make Stash better — it comes straight to me. Only what you type here is sent.</p>
+    <p style="color:var(--muted);font-size:13px;margin:6px 0 12px">Tell me what would make Stash better, it comes straight to me. Only what you type here is sent.</p>
     <div class="field"><label>Your idea</label><textarea id="fb_msg" placeholder="I wish Stash could..." style="width:100%;min-height:84px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:14px;color:var(--ink);resize:vertical"></textarea></div>
     <div class="field"><label>Your email (optional, only if you'd like a reply)</label><input id="fb_email" type="email" placeholder="you@email.com"></div>
     <button class="btn coral" onclick="sendFeedback(this)">Send it</button>
@@ -848,12 +913,12 @@ function vSettings(){
   <div style="margin-top:30px;padding-top:16px;border-top:1px solid var(--line)"><button class="btn ghost" style="color:var(--coral-d);border-color:#E6C9C2;font-size:13px;padding:9px 16px" onclick="resetAll()">Clear all data</button></div>`;
 }
 function saveProfile(){state.profile.nickname=$("#s_nick").value.trim();state.profile.fullName=$("#s_full").value.trim();save();toast("Saved.");render();}
-function setTier(t){if(t==="roast"){confirmModal("Switch to Roast?","Roast pulls zero punches — heavy language, all in good fun. Sure you want it loud?",()=>{state.voice.tier="roast";save();render();toast("Roast mode on. You asked for it.");});return;}state.voice.tier=t;save();render();}
+function setTier(t){if(t==="roast"){confirmModal("Switch to Roast?","Roast pulls zero punches, heavy language, all in good fun. Sure you want it loud?",()=>{state.voice.tier="roast";save();render();toast("Roast mode on. You asked for it.");});return;}state.voice.tier=t;save();render();}
 function setVoice(on){state.voice.enabled=on;save();render();}
 
 /* ---------- goal CRUD ---------- */
 function goalModal(id){
-  if(!id && GOAL_LOCK && state.goals.length>=MAX_GOALS){ toast("This version tracks up to "+MAX_GOALS+" goals — Stash Plus unlocks unlimited."); go("settings"); return; }
+  if(!id && GOAL_LOCK && state.goals.length>=MAX_GOALS){ toast("This version tracks up to "+MAX_GOALS+" goals, Stash Plus unlocks unlimited."); go("settings"); return; }
   const g=id?goalById(id):null, e=g||{};
   $("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>${g?"Edit goal":"New goal"}</h3>
     <div class="field"><label>Goal name</label><input id="g_name" value="${esc(e.name||"")}" placeholder="Name your goal"></div>
@@ -881,7 +946,7 @@ async function sendFeedback(btn){
     const j=await res.json();
     if(j.success){$("#fb_msg").value="";$("#fb_email").value="";toast("Sent! Thank you, truly.");}
     else throw 0;
-  }catch(e){toast("Couldn't send right now — check your connection and try again.");}
+  }catch(e){toast("Couldn't send right now, check your connection and try again.");}
   btn.disabled=false; btn.textContent=old;
 }
 async function joinWaitlist(btn){
@@ -896,7 +961,7 @@ async function joinWaitlist(btn){
     const j=await res.json();
     if(j.success){$("#plus_email").value="";if($("#plus_wish"))$("#plus_wish").value="";toast("You're on the list! I'll be in touch.");}
     else throw 0;
-  }catch(e){toast("Couldn't join right now — check your connection and try again.");}
+  }catch(e){toast("Couldn't join right now, check your connection and try again.");}
   btn.disabled=false; btn.textContent=old;
 }
 function deleteGoal(id){confirmModal("Delete this goal?","Every entry in it goes too. Back up first if you're unsure.",()=>{
@@ -943,7 +1008,7 @@ function silenceBackupFlow(){
   $("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>Stop backup reminders?</h3>
     <p style="color:#5b524b;font-size:14px;margin:0 0 12px">Choose how long. While reminders are off, backing up is on you.</p>
     <div class="pills" style="margin-bottom:14px"><button class="pill" onclick="setSilencePick(30,this)">For 30 days</button><button class="pill" onclick="setSilencePick(90,this)">For 90 days</button><button class="pill" onclick="setSilencePick(0,this)">Forever</button></div>
-    <label style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:#5b524b;margin-bottom:16px;line-height:1.5"><input type="checkbox" id="silenceAgree" oninput="updSilence()" style="margin-top:3px;flex-shrink:0"><span>I understand my data is only on this device, and if I don't back up, a new phone, a deleted app, or clearing browser data will <b>erase everything</b> — with no way for Stash to recover it.</span></label>
+    <label style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:#5b524b;margin-bottom:16px;line-height:1.5"><input type="checkbox" id="silenceAgree" oninput="updSilence()" style="margin-top:3px;flex-shrink:0"><span>I understand my data is only on this device, and if I don't back up, a new phone, a deleted app, or clearing browser data will <b>erase everything</b>, with no way for Stash to recover it.</span></label>
     <div class="acts"><button class="btn ghost" onclick="showBackupReminder()">Back</button><button class="btn coral" id="silenceBtn" disabled onclick="confirmSilence()">Turn off reminders</button></div>
   </div></div>`;
 }
@@ -972,8 +1037,8 @@ function whatIfCalc(){
 function moveToPlus(){
   const payload={schemaVersion:STASH_SCHEMA,profile:state.profile,voice:state.voice,goals:state.goals};
   const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-  if(!PLUS_IMPORT_URL){ toast("Plus isn't live yet — your goals and history will come with you when it launches."); return; }
-  if(enc.length>60000){ exportData(); toast("You've got a lot saved — I downloaded a backup file to import into Plus."); return; }
+  if(!PLUS_IMPORT_URL){ toast("Plus isn't live yet, your goals and history will come with you when it launches."); return; }
+  if(enc.length>60000){ exportData(); toast("You've got a lot saved, I downloaded a backup file to import into Plus."); return; }
   location.href=PLUS_IMPORT_URL+"#stash="+enc;
 }
 function exportCSV(){
@@ -1017,7 +1082,7 @@ function finishSetup(){
   const ng={id:uid(),name:$("#w_goal").value.trim(),target:t,startDate:$("#w_start").value||todayIso(),targetDate:$("#w_tdate").value,notes:"",deposits:[]};
   state.goals.push(ng); state.activeGoalId=ng.id; save(); go("home");
 }
-function loadSample(){state=JSON.parse(JSON.stringify(SAMPLE));save();go("home");toast("This is sample data — clear it in Settings to start fresh.");}
+function loadSample(){state=JSON.parse(JSON.stringify(SAMPLE));save();go("home");toast("This is sample data, clear it in Settings to start fresh.");}
 
 /* ---------- modal ---------- */
 function confirmModal(title,body,onYes){$("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>${esc(title)}</h3><p style="color:#5b524b;font-size:14px;margin:0 0 18px">${esc(body)}</p><div class="acts"><button class="btn ghost" onclick="closeModal()">Never mind</button><button class="btn coral" id="mYes">Yes, do it</button></div></div></div>`;$("#mYes").onclick=()=>{closeModal();onYes();};}
