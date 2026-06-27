@@ -300,15 +300,18 @@ function sampleStdev(a){if(a.length<2)return 0;const m=a.reduce((x,y)=>x+y,0)/a.
 
 function computeGoal(goal){
   const d=(goal.deposits||[]).slice().filter(x=>x.date).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  const real=d.filter(x=>!x.seed); /* real deposits; excludes any pre-app "Starting balance" seed */
   const ins=d.map(x=>+x.in||0), outs=d.map(x=>+x.out||0);
   const saved=ins.reduce((a,b)=>a+b,0)-outs.reduce((a,b)=>a+b,0);
+  const seedTotal=d.reduce((a,x)=>a+(x.seed?(+x.in||0):0),0);
+  const savedReal=saved-seedTotal; /* saved since starting in the app, used for pace/forecast */
   const target=+goal.target||0;
   const pct=target>0?saved/target:0;
   const bucket=pct>=1?100:Math.floor((pct*100)/10)*10;
   const left=Math.max(target-saved,0);
-  const count=d.length, last=d[count-1]||null;
+  const count=real.length, last=real[real.length-1]||null;
   const lastIn=last?(+last.in||0):0, lastOut=last?(+last.out||0):0;
-  const posIns=ins.filter(x=>x>0);
+  const posIns=real.map(x=>+x.in||0).filter(x=>x>0);
   const avgIn=posIns.length?posIns.reduce((a,b)=>a+b,0)/posIns.length:0;
   const cv=avgIn>0?sampleStdev(posIns)/avgIn:0;
   const lastType=lastOut>0?"withdrawal":(lastIn>0?"deposit":"none");
@@ -335,7 +338,7 @@ function computeGoal(goal){
   const targetMs=goal.targetDate?dateMs(goal.targetDate):null;
   let projected="Not yet", projMs=null;
   if(saved>=target&&target>0)projected="Done!";
-  else if(count>=2&&daysSaving>0&&saved>0){const rate=saved/daysSaving; if(rate>0){const need=Math.ceil(left/rate); projMs=todayMs+need*DAY; projected="About "+new Date(projMs).toLocaleDateString("en-US",{month:"short",day:"numeric"});}}
+  else if(count>=2&&daysSaving>0&&savedReal>0){const rate=savedReal/daysSaving; if(rate>0){const need=Math.ceil(left/rate); projMs=todayMs+need*DAY; projected="About "+new Date(projMs).toLocaleDateString("en-US",{month:"short",day:"numeric"});}}
   let nextMile=null; if(pct<1){const nb=Math.min(bucket+10,100); nextMile={amt:Math.max(target*nb/100-saved,0),pct:nb};}
   let neededWeekly=null; if(targetMs&&targetMs>todayMs&&left>0){const wks=(targetMs-todayMs)/(7*DAY); if(wks>0)neededWeekly=left/wks;}
 
@@ -347,7 +350,7 @@ function computeGoal(goal){
 const KEY="stash_v1";
 const MAX_GOALS=2; /* cap for this version once Plus exists */
 const GOAL_LOCK=false; /* keep false for now (no cap). Flip to true when Stash Plus launches to cap this version at MAX_GOALS and drive upgrades. */
-const FEEDBACK_KEY="fcbc52db-91d3-40a7-96a6-956ce70e6d8d"; /* Web3Forms access key (public client-side key) — feedback + Plus waitlist email Holly */
+const FEEDBACK_KEY="fcbc52db-91d3-40a7-96a6-956ce70e6d8d"; /* Web3Forms access key (public client-side key); feedback + Plus waitlist email Holly */
 const STASH_SCHEMA=1; /* bump if the data shape changes, so Plus can migrate old exports */
 const PLUS_IMPORT_URL=""; /* when Stash Plus (Lovable) is live, set its import URL here.
   UPGRADE CONTRACT, Plus reads the handoff at:  <PLUS_IMPORT_URL>#stash=<base64url(JSON)>
@@ -942,6 +945,7 @@ function goalModal(id){
     <div class="field"><label>Goal name</label><input id="g_name" value="${esc(e.name||"")}" placeholder="Name your goal"></div>
     <div class="row2"><div class="field"><label>Target ($)</label><input id="g_target" type="text" inputmode="decimal" value="${e.target?dispMoney(e.target):""}" placeholder="Your target amount" onfocus="rawInput(this)" onblur="fmtInput(this)"></div>
     <div class="field"><label>Start date</label><input id="g_start" type="date" value="${esc(e.startDate||todayIso())}"></div></div>
+    ${!g?`<div class="field"><label>Starting balance <span style="color:var(--muted);font-weight:400">(optional, money you've already saved)</span></label><input id="g_startbal" type="text" inputmode="decimal" placeholder="$0" onfocus="rawInput(this)" onblur="fmtInput(this)"></div>`:""}
     <div class="field"><label>Target date (optional)</label><input id="g_tdate" type="date" value="${esc(e.targetDate||"")}"></div>
     <div class="field"><label>My notes (optional)</label><textarea id="g_notes" placeholder="Why it matters, ideas, reminders..." style="width:100%;min-height:70px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:14px;color:var(--ink);resize:vertical">${esc(e.notes||"")}</textarea></div>
     <div class="acts"><button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn coral" onclick="saveGoal('${g?g.id:""}')">Save</button></div></div></div>`;
@@ -950,7 +954,7 @@ function saveGoal(id){
   const name=$("#g_name").value.trim(), target=numVal($("#g_target")), notes=(($("#g_notes")||{}).value||"").trim();
   if(!name||!target){toast("Give it a name and a target.");return;}
   if(id){const g=goalById(id);g.name=name;g.target=target;g.startDate=$("#g_start").value||todayIso();g.targetDate=$("#g_tdate").value;g.notes=notes;}
-  else{const ng={id:uid(),name,target,startDate:$("#g_start").value||todayIso(),targetDate:$("#g_tdate").value,notes,deposits:[]};state.goals.push(ng);state.activeGoalId=ng.id;view="home";}
+  else{const ng={id:uid(),name,target,startDate:$("#g_start").value||todayIso(),targetDate:$("#g_tdate").value,notes,deposits:[]};const sb=numVal($("#g_startbal"))||0;if(sb>0)ng.deposits.push({id:uid(),date:ng.startDate,note:"Starting balance",in:sb,out:0,seed:true});state.goals.push(ng);state.activeGoalId=ng.id;view="home";}
   save();closeModal();toast(id?"Goal updated.":"Goal added.");render();window.scrollTo(0,0);
 }
 function saveGoalNotes(id){const g=goalById(id),el=$("#goalNotes");if(g&&el){g.notes=el.value;save();}}
@@ -1086,6 +1090,7 @@ function vWelcome(){
       <div class="row2"><div class="field"><label>Target amount ($)</label><input id="w_target" type="text" inputmode="decimal" placeholder="Your target amount" onfocus="rawInput(this)" onblur="fmtInput(this)"></div>
       <div class="field"><label>What should I call you?</label><input id="w_nick" placeholder="Your nickname"></div></div>
       <div class="field"><label>Full name <span style="color:var(--muted);font-weight:400">(only used for the sassy over-budget moments)</span></label><input id="w_full" placeholder="First & middle name"></div>
+      <div class="field"><label>Starting balance <span style="color:var(--muted);font-weight:400">(optional, money you've already saved)</span></label><input id="w_startbal" type="text" inputmode="decimal" placeholder="$0" onfocus="rawInput(this)" onblur="fmtInput(this)"></div>
       <div class="row2"><div class="field"><label>Start date</label><input id="w_start" type="date" value="${todayIso()}"></div>
       <div class="field"><label>Target date (optional)</label><input id="w_tdate" type="date"></div></div>
       <button class="btn coral" style="width:100%" onclick="finishSetup()">Start saving</button>
@@ -1098,6 +1103,7 @@ function finishSetup(){
   if(!$("#w_goal").value.trim()||!t){toast("Give me a goal and a number to aim at.");return;}
   state=blank(); state.profile.nickname=$("#w_nick").value.trim(); state.profile.fullName=$("#w_full").value.trim();
   const ng={id:uid(),name:$("#w_goal").value.trim(),target:t,startDate:$("#w_start").value||todayIso(),targetDate:$("#w_tdate").value,notes:"",deposits:[]};
+  const sb=numVal($("#w_startbal"))||0; if(sb>0)ng.deposits.push({id:uid(),date:ng.startDate,note:"Starting balance",in:sb,out:0,seed:true});
   state.goals.push(ng); state.activeGoalId=ng.id; save(); go("home");
 }
 function loadSample(){state=JSON.parse(JSON.stringify(SAMPLE));save();go("home");toast("This is sample data, clear it in Settings to start fresh.");}
