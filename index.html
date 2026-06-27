@@ -150,7 +150,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 @keyframes drop{0%{top:-140px;opacity:0}14%{top:26px;opacity:1}82%{top:26px;opacity:1}100%{top:26px;opacity:0}}
 
 @media(max-width:860px){
-  html,body{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+  html,body{position:fixed;inset:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;touch-action:pan-y}
   #root{height:100%}
   .app{grid-template-columns:1fr;height:100%;min-height:0}
   .side{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;align-items:center;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:50;gap:0;border-top:1px solid #000;overflow:hidden}
@@ -159,7 +159,7 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
   .nav button{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;font-size:10px;padding:8px 4px;border-radius:8px}
   .nav button.on{background:transparent;color:var(--teal)}
   .nav .ico{font-size:21px}
-  .main{padding:calc(20px + env(safe-area-inset-top)) 18px calc(110px + env(safe-area-inset-bottom));height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  .main{padding:calc(20px + env(safe-area-inset-top)) 18px calc(110px + env(safe-area-inset-bottom));height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
   .topgrid{grid-template-columns:1fr}
   .chgrid{grid-template-columns:1fr}
   .viewhead{font-size:22px}
@@ -744,7 +744,7 @@ function chartFlow(c,ns=""){
   const bars=days.map((d,i)=>{const pos=d.net>=0,h=Math.max(Math.abs(d.net)/maxBar*78,3),col=pos?'var(--teal)':'var(--out)';
     F.push({date:fmtDate(d.date),txns:d.txns});
     const md=new Date(d.date+"T00:00:00").toLocaleDateString("en-US",{month:"numeric",day:"numeric"});
-    return `<div onmouseover="flowTip('${ns}',${i},0,this)" onmouseout="flowTipHide('${ns}')" ontouchstart="flowTip('${ns}',${i},1,this)" onclick="drill('${d.date}')" style="flex:1 1 0;min-width:0;max-width:46px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;cursor:pointer">
+    return `<div onmouseover="flowTip('${ns}',${i},0,this)" onmouseout="flowTipHide('${ns}')" ontouchstart="flowTip('${ns}',${i},1,this)" onclick="flowTip('${ns}',${i},1,this)" style="flex:1 1 0;min-width:0;max-width:46px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;cursor:pointer">
       <div style="font-size:9px;color:${pos?'var(--teal-d)':'var(--out)'};margin-bottom:3px;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center">${pos?'+':'-'}${money(Math.abs(d.net))}</div>
       <div style="width:70%;max-width:24px;height:${h.toFixed(1)}%;min-height:3px;background:${col};border-radius:5px 5px 0 0"></div>
       <div style="font-size:9px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center">${md}</div>
@@ -841,15 +841,19 @@ function celebrate(title,sub){
 function vGoals(){
   const atLimit=GOAL_LOCK&&state.goals.length>=MAX_GOALS;
   const rows=state.goals.map(g=>{const c=computeGoal(g); return `
-    <div style="padding:14px 0;border-bottom:1px solid var(--line)">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-        <input value="${esc(g.name)}" onfocus="this.style.borderColor='var(--line)'" onblur="this.style.borderColor='transparent';updGoal('${g.id}','name',this.value)" style="flex:1;min-width:120px;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink);border:1px solid transparent;background:transparent;padding:4px 6px;border-radius:6px">
-        <span style="font-size:13px;color:var(--muted);white-space:nowrap">${money(c.saved)} of ${money(g.target)} · ${Math.round(c.pct*100)}%</span>
-        <button class="btn ghost" style="padding:5px 11px;font-size:12px" onclick="openGoal('${g.id}')">Open</button>
-        <button class="btn ghost" style="padding:5px 11px;font-size:12px" onclick="deleteGoal('${g.id}')">Delete</button>
+    <div style="padding:13px 0;border-bottom:1px solid var(--line)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <input value="${esc(g.name)}" placeholder="Goal name" onblur="updGoal('${g.id}','name',this.value)" style="flex:1;min-width:0;font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink);border:1px solid var(--line);background:#fff;padding:7px 32px 7px 10px;border-radius:var(--r-sm)">
+        <span style="margin-left:-30px;color:var(--muted);font-size:13px;pointer-events:none">✎</span>
+        <button class="btn ghost" style="padding:7px 14px;font-size:13px;flex-shrink:0" onclick="openGoal('${g.id}')">Open</button>
       </div>
-      <div style="display:flex;gap:14px;margin-top:8px;flex-wrap:wrap;align-items:flex-end">
-        <div><span class="ql">Target</span><input type="text" inputmode="decimal" value="${dispMoney(g.target)}" onfocus="rawInput(this)" onblur="fmtInput(this);updGoal('${g.id}','target',this.value)" style="width:110px;padding:6px 8px;border:1px solid var(--line);border-radius:var(--r-sm)"></div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px">
+        <span class="ql" style="margin:0 0 0 2px">Target</span>
+        <input type="text" inputmode="decimal" value="${dispMoney(g.target)}" onfocus="rawInput(this)" onblur="fmtInput(this);updGoal('${g.id}','target',this.value)" style="width:96px;padding:6px 8px;border:1px solid var(--line);border-radius:var(--r-sm)">
+        <span style="font-size:12px;color:var(--muted)">${money(c.saved)} saved · ${Math.round(c.pct*100)}%</span>
+        <button class="btn ghost" style="margin-left:auto;padding:5px 11px;font-size:12px;color:var(--coral-d);border-color:#E6C9C2" onclick="deleteGoal('${g.id}')">Delete</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:9px;flex-wrap:wrap;align-items:flex-end">
         <div><span class="ql">Start</span><input type="date" value="${esc(g.startDate||'')}" onchange="updGoal('${g.id}','startDate',this.value)" style="padding:6px 8px;border:1px solid var(--line);border-radius:var(--r-sm)"></div>
         <div><span class="ql">Finish by (optional)</span><input type="date" value="${esc(g.targetDate||'')}" onchange="updGoal('${g.id}','targetDate',this.value)" style="padding:6px 8px;border:1px solid var(--line);border-radius:var(--r-sm)"></div>
       </div>
@@ -1091,12 +1095,23 @@ function vWelcome(){
     <p style="font-family:var(--serif);font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin:0">Stash</p>
     <h1 class="viewhead" style="font-size:34px">A savings jar that talks back.</h1>
     <p class="viewsub">Tell me what you're chasing and I'll cheer you the whole way. No account, no download, it just lives on your device.</p>
+    <div class="card" style="margin-bottom:16px">
+      <div class="cardhd" style="margin-bottom:12px">First, a little about you</div>
+      <div class="row2"><div class="field"><label>What should I call you?</label><input id="w_nick" placeholder="Your nickname"></div>
+      <div class="field"><label>Full name <span style="color:var(--muted);font-weight:400">(for the sassy scolds)</span></label><input id="w_full" placeholder="First & middle"></div></div>
+      <div class="field" style="margin-bottom:6px"><label>Pick your vibe</label>
+        <div class="pills">
+          <button class="pill" id="wv_sweet" onclick="welcomeTier('sweet')">Sweet</button>
+          <button class="pill on" id="wv_sassy" onclick="welcomeTier('sassy')">Sassy</button>
+          <button class="pill" id="wv_roast" onclick="welcomeTier('roast')">Roast</button>
+        </div></div>
+      <p style="color:var(--muted);font-size:12px;margin:0">Sweet is gentle, Sassy is your real-talk bestie, Roast pulls no punches (and curses). Switch anytime in Settings.</p>
+    </div>
     <div class="card">
+      <div class="cardhd" style="margin-bottom:12px">Now, your first goal</div>
       <div class="field"><label>What are you saving for?</label><input id="w_goal" placeholder="Name your goal"></div>
       <div class="row2"><div class="field"><label>Target amount ($)</label><input id="w_target" type="text" inputmode="decimal" placeholder="Your target amount" onfocus="rawInput(this)" onblur="fmtInput(this)"></div>
-      <div class="field"><label>What should I call you?</label><input id="w_nick" placeholder="Your nickname"></div></div>
-      <div class="field"><label>Full name <span style="color:var(--muted);font-weight:400">(only used for the sassy over-budget moments)</span></label><input id="w_full" placeholder="First & middle name"></div>
-      <div class="field"><label>Starting balance <span style="color:var(--muted);font-weight:400">(optional, money you've already saved)</span></label><input id="w_startbal" type="text" inputmode="decimal" placeholder="$0" onfocus="rawInput(this)" onblur="fmtInput(this)"></div>
+      <div class="field"><label>Starting balance <span style="color:var(--muted);font-weight:400">(optional)</span></label><input id="w_startbal" type="text" inputmode="decimal" placeholder="$0" onfocus="rawInput(this)" onblur="fmtInput(this)"></div></div>
       <div class="row2"><div class="field"><label>Start date</label><input id="w_start" type="date" value="${todayIso()}"></div>
       <div class="field"><label>Target date (optional)</label><input id="w_tdate" type="date"></div></div>
       <button class="btn coral" style="width:100%" onclick="finishSetup()">Start saving</button>
@@ -1104,10 +1119,12 @@ function vWelcome(){
     <div class="warn" style="margin-top:16px"><span class="ico">⚠️</span><div>Heads up: your data is saved only on this device, with no online account. Add Stash to your home screen and back it up now and then so you never lose your progress.</div></div>
     <p style="text-align:center;margin-top:16px"><button class="btn ghost" onclick="loadSample()">Just show me a demo first</button></p></div>`;
 }
+let _welcomeTier="sassy";
+function welcomeTier(t){_welcomeTier=t;["sweet","sassy","roast"].forEach(x=>{const b=$("#wv_"+x);if(b)b.classList.toggle("on",x===t);});}
 function finishSetup(){
   const t=numVal($("#w_target"))||0;
   if(!$("#w_goal").value.trim()||!t){toast("Give me a goal and a number to aim at.");return;}
-  state=blank(); state.profile.nickname=$("#w_nick").value.trim(); state.profile.fullName=$("#w_full").value.trim();
+  state=blank(); state.profile.nickname=$("#w_nick").value.trim(); state.profile.fullName=$("#w_full").value.trim(); state.voice.tier=_welcomeTier;
   const ng={id:uid(),name:$("#w_goal").value.trim(),target:t,startDate:$("#w_start").value||todayIso(),targetDate:$("#w_tdate").value,notes:"",deposits:[]};
   const sb=numVal($("#w_startbal"))||0; if(sb>0)ng.deposits.push({id:uid(),date:ng.startDate,note:"Starting balance",in:sb,out:0,seed:true});
   state.goals.push(ng); state.activeGoalId=ng.id; save(); go("home");
@@ -1116,7 +1133,7 @@ function loadSample(){state=JSON.parse(JSON.stringify(SAMPLE));save();go("home")
 
 /* ---------- modal ---------- */
 function confirmModal(title,body,onYes){$("#modalHost").innerHTML=`<div class="scrim"><div class="modal"><h3>${esc(title)}</h3><p style="color:#5b524b;font-size:14px;margin:0 0 18px">${esc(body)}</p><div class="acts"><button class="btn ghost" onclick="closeModal()">Never mind</button><button class="btn coral" id="mYes">Yes, do it</button></div></div></div>`;$("#mYes").onclick=()=>{closeModal();onYes();};}
-function closeModal(){$("#modalHost").innerHTML="";}
+function closeModal(){ try{document.activeElement&&document.activeElement.blur();}catch(e){} $("#modalHost").innerHTML=""; }
 function closeGoalModal(){ $("#modalHost").innerHTML=""; render(); }
 function openGoalModal(id){
   const g=goalById(id); if(!g)return; const c=computeGoal(g);
