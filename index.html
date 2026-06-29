@@ -20,20 +20,24 @@
   --bg:#FAF6F1; --card:#FFFFFF; --line:#ECE4DB; --muted:#8E837A; --ink:#2C2421;
   --teal-d:#2C7C78; --coral-d:#9A3D2C; --in:#1D9E75; --out:#D85A30; --warn-bg:#FAEEDA; --warn-ink:#7A4B0B;
   --serif:'Raleway','Poppins',sans-serif; --sans:'Poppins',-apple-system,Segoe UI,sans-serif;
-  --r:14px; --r-sm:10px;
+  --r:20px; --r-sm:13px;
+  --shadow:0 18px 34px -26px rgba(60,40,30,.22), 0 2px 6px -3px rgba(60,40,30,.07);
+  --line-soft:#F2EAE1;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;overflow-x:hidden;overscroll-behavior-x:none;max-width:100%;width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 #root{max-width:100%;overflow-x:hidden}
-body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-weight:400;-webkit-font-smoothing:antialiased;line-height:1.5}
-button{font-family:inherit;cursor:pointer}
+body{font-family:var(--sans);background:#FAF6F1;background-image:radial-gradient(135% 115% at 12% -10%, #FFFFFF 0%, #FAF6F1 48%, #F3E9DE 100%);background-attachment:scroll;color:var(--ink);font-weight:400;-webkit-font-smoothing:antialiased;line-height:1.5}
+button{font-family:inherit;cursor:pointer;transition:transform .12s ease,filter .12s ease}
+button:active{transform:translateY(1px) scale(.985)}
 input,select,textarea{font-family:inherit;font-size:16px;max-width:100%}
 .hidden{display:none!important}
 input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 
 .app{display:grid;grid-template-columns:330px 1fr;min-height:100vh}
-.side{background:var(--espresso);color:#fff;padding:26px 18px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.side{background:var(--espresso);color:#fff;min-width:0}
+.sideinner{padding:26px 18px;display:flex;flex-direction:column;gap:6px;box-sizing:border-box}
 .sideadd{background:#fff;border-radius:var(--r);padding:11px;margin-top:16px;color:var(--ink)}
 .sideadd .cardhd{color:var(--ink)}
 .brand{font-family:var(--serif);font-size:24px;font-weight:600;letter-spacing:.5px;margin:0 0 2px}
@@ -55,16 +59,16 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .chgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .topgrid>*,.chgrid>*,.chartcard{min-width:0}
 
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:15px 18px}
+.card{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow)}
 .cardhd{font-family:var(--serif);font-size:15px;font-weight:600}
 .grid{display:grid;gap:16px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:9px 12px}
+.tile{background:#FBF6F0;border:0;border-radius:14px;padding:11px 14px}
 .tile .lab{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin:0 0 3px}
 .tile .val{font-size:14px;font-weight:500;font-family:var(--sans)}
 
-.hero{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 22px;margin-bottom:16px}
-.talk{background:#E6F4F3;color:var(--teal-d);border-radius:var(--r-sm);padding:10px 14px;font-size:15px;margin:0 0 12px;display:flex;gap:10px;align-items:flex-start}
+.hero{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:20px 24px;margin-bottom:16px;box-shadow:var(--shadow)}
+.talk{background:#E6F4F3;color:var(--teal-d);border-radius:16px;padding:13px 16px;font-size:15px;margin:0 0 12px;display:flex;gap:11px;align-items:flex-start}
 .talk .q{font-size:20px;line-height:1}
 .heronums{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 .heronums .big{font-family:var(--sans);font-size:32px;font-weight:600;line-height:1}
@@ -72,12 +76,12 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .heronums .pc{margin-left:auto;font-family:var(--sans);font-size:28px;color:var(--teal-d);font-weight:600}
 .hlab{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--teal-d);font-weight:500;margin-bottom:2px}
 .hero .big{font-family:var(--sans);font-size:40px;font-weight:600;line-height:1;color:var(--ink)}
-.barwrap{height:16px;border-radius:8px;background:var(--peach);margin:12px 0 4px;overflow:hidden}
+.barwrap{height:12px;border-radius:12px;background:#F4E7DA;margin:14px 0 6px;overflow:hidden}
 .bar{height:100%;background:var(--teal);width:0;border-radius:9px;transition:width .6s cubic-bezier(.4,0,.2,1)}
 .barscale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
 
-.gcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:11px 14px;cursor:pointer;transition:.15s}
-.gcard:hover{border-color:var(--teal);transform:translateY(-2px)}
+.gcard{background:var(--card);border:1px solid var(--line-soft);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:.18s ease;box-shadow:var(--shadow)}
+.gcard:hover{border-color:var(--teal);transform:translateY(-3px);box-shadow:0 24px 40px -24px rgba(60,40,30,.28)}
 .gbar{height:10px;border-radius:5px;background:var(--peach);margin:12px 0 6px;overflow:hidden}
 .gbar div{height:100%;background:var(--teal)}
 
@@ -153,7 +157,8 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 @media(max-width:860px){
   html,body{touch-action:pan-y;overscroll-behavior:none}
   .app{grid-template-columns:1fr}
-  .side{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;align-items:center;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:50;gap:0;border-top:1px solid #000;overflow:hidden}
+  .side{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;align-items:center;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:50;gap:0;border-top:1px solid #000;overflow:hidden;display:flex}
+  .sideinner{display:contents}
   .brand,.side .foot,.addbtn,.sideadd,.plusbtn{display:none}
   .nav{flex-direction:row;margin:0;width:100%;gap:0;overflow:hidden}
   .nav button{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;font-size:10px;padding:8px 4px;border-radius:8px}
@@ -750,10 +755,9 @@ function chartFlow(c,ns=""){
   const days=order.map(k=>({date:k,net:map[k].in-map[k].out,txns:map[k].txns})).slice(-14);
   const maxBar=Math.max(...days.map(d=>Math.abs(d.net)),1), n=days.length;
   const bars=days.map((d,i)=>{const pos=d.net>=0,h=Math.max(Math.abs(d.net)/maxBar*78,3),col=pos?'var(--teal)':'var(--out)';
-    F.push({date:fmtDate(d.date),txns:d.txns});
+    F.push({date:fmtDate(d.date),txns:d.txns,net:d.net});
     const md=new Date(d.date+"T00:00:00").toLocaleDateString("en-US",{month:"numeric",day:"numeric"});
     return `<div onmouseover="flowTip('${ns}',${i},0,this)" onmouseout="flowTipHide('${ns}')" ontouchstart="flowTip('${ns}',${i},1,this)" onclick="flowTip('${ns}',${i},1,this)" style="flex:1 1 0;min-width:0;max-width:46px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;cursor:pointer">
-      <div style="font-size:9px;color:${pos?'var(--teal-d)':'var(--out)'};margin-bottom:3px;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center">${pos?'+':'-'}${money(Math.abs(d.net))}</div>
       <div style="width:70%;max-width:24px;height:${h.toFixed(1)}%;min-height:3px;background:${col};border-radius:5px 5px 0 0"></div>
       <div style="font-size:9px;color:var(--muted);margin-top:5px;white-space:nowrap;overflow:hidden;max-width:100%;text-align:center">${md}</div>
     </div>`;}).join("");
@@ -820,7 +824,7 @@ function statTip(el,auto){ const t=$("#stattip"),text=el.dataset.tip; if(!t||!te
   clearTimeout(t._to); if(auto)t._to=setTimeout(()=>{t.style.display="none";},2800); }
 function statTipHide(){ const t=$("#stattip"); if(t)t.style.display="none"; }
 function chartTipAt(id,html,el,auto){ const t=document.getElementById(id); if(!t||!el)return; t.innerHTML=html; const cont=t.parentElement,cr=cont.getBoundingClientRect(),er=el.getBoundingClientRect(); t.style.display="block"; t.style.top="6px"; t.style.right="auto"; t.style.transform="none"; const tw=t.offsetWidth,sl=cont.scrollLeft||0; let left=(er.left+er.width/2-cr.left)+sl-tw/2; left=Math.max(sl+4,Math.min(sl+cr.width-tw-4,left)); t.style.left=left+"px"; clearTimeout(t._to); if(auto)t._to=setTimeout(()=>{t.style.display="none";},2800); }
-function flowTip(ns,i,auto,el){ const a=window._f&&window._f[ns],d=a&&a[i]; if(!d)return; const html=`<b>${esc(d.date)}</b><br>`+d.txns.map(x=>{const isIn=(+x.in||0)>0; return `${esc(x.note||(isIn?'Deposit':'Withdrawal'))} <span style="color:${isIn?'#9FE1CB':'#F0997B'}">${isIn?'+'+money(x.in):'-'+money(x.out)}</span>`;}).join("<br>"); chartTipAt(ns+'ftip',html,el,auto); }
+function flowTip(ns,i,auto,el){ const a=window._f&&window._f[ns],d=a&&a[i]; if(!d)return; const net=+d.net||0,np=net>=0; const html=`<b>${esc(d.date)}</b><br>`+d.txns.map(x=>{const isIn=(+x.in||0)>0; return `${esc(x.note||(isIn?'Deposit':'Withdrawal'))} <span style="color:${isIn?'#9FE1CB':'#F0997B'}">${isIn?'+'+money(x.in):'-'+money(x.out)}</span>`;}).join("<br>")+`<br><span style="opacity:.65">Net that day</span> <b style="color:${np?'#9FE1CB':'#F0997B'}">${np?'+':'-'}${money(Math.abs(net))}</b>`; chartTipAt(ns+'ftip',html,el,auto); }
 function flowTipHide(ns){ tipHide(ns+'ftip'); }
 function growthTip(ns,i,auto,el){ const a=window._g&&window._g[ns],d=a&&a[i]; if(!d)return; chartTipAt(ns+'gtip',d.html,el,auto); }
 function growthTipHide(ns){ tipHide(ns+'gtip'); }
@@ -922,7 +926,7 @@ function vSettings(){
     <p style="color:var(--muted);font-size:11px;margin:8px 0 0">No charge now, I'll email you when Plus is ready.</p>
   </div>
 
-  <div class="card" style="margin-bottom:18px;max-width:640px"><div class="cardhd">Your data &amp; backups</div>
+  <div class="card" id="backup-section" style="margin-bottom:18px;max-width:640px;scroll-margin-top:20px"><div class="cardhd">Your data &amp; backups</div>
     <div class="warn" style="margin:14px 0"><span class="ico">⚠️</span><div><b>Read this, ${esc(p.nickname||"babe")}.</b> Your data lives only on this device, in this browser. No accounts, nothing stored online. That keeps it private, but a new phone, a deleted app, or clearing browser data will <b>erase everything</b>. Back up regularly, and add it to your home screen.</div></div>
     <div class="pills">
       <button class="pill" onclick="exportData()">⬇ Back up (file)</button>
@@ -1030,6 +1034,7 @@ function saveRow(gid,id){
 
 /* ---------- backup ---------- */
 function exportData(){const blob=new Blob([JSON.stringify({schemaVersion:STASH_SCHEMA,...state},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="stash-backup-"+todayIso()+".json";a.click();if(state.backup){state.backup.lastBackup=Date.now();save();}toast("Backed up. Keep that file safe.");}
+function goBackup(){ go('settings'); setTimeout(()=>{ const el=document.getElementById('backup-section'); if(!el)return; el.scrollIntoView({behavior:'smooth',block:'start'}); el.style.transition='box-shadow .3s ease'; el.style.boxShadow='0 0 0 3px var(--teal)'; setTimeout(()=>{el.style.boxShadow=el.style.transition='';},1500); },70); }
 let _silPick;
 function maybeBackupReminder(){
   const b=state.backup; if(!b||b.silenced)return;
@@ -1059,23 +1064,27 @@ function updSilence(){ const a=$("#silenceAgree"),b=$("#silenceBtn"); if(b)b.dis
 function confirmSilence(){ if(!state.backup)return; if(_silPick===0)state.backup.silenced=true; else state.backup.snoozeUntil=Date.now()+_silPick*864e5; save(); closeModal(); toast("Reminders off. Back up sometimes anyway!"); }
 function whatIfPanel(gs){
   return `<div class="card" style="margin-bottom:12px"><div class="cardhd" style="margin-bottom:4px">What if…</div>
-    <p style="color:var(--muted);font-size:12px;margin:0 0 12px;line-height:1.5">Curious how a weekly habit pays off? Pick a goal and a weekly amount, and I'll tell you the date you'd hit it.</p>
+    <p style="color:var(--muted);font-size:12px;margin:0 0 12px;line-height:1.5">Curious how a steady habit pays off? Pick a goal and an amount, and I'll tell you the date you'd hit it.</p>
     <div class="field" style="margin-bottom:9px"><label>For which goal?</label><select id="wio_scope" onchange="whatIfCalc()"><option value="__all__">All goals</option>${gs.map(c=>`<option value="${c.id}">${esc(capFirst(c.gname))}</option>`).join("")}</select></div>
-    <div class="field" style="margin-bottom:9px"><label>If I save this each week</label><input id="wio_week" type="text" inputmode="decimal" placeholder="Per week ($)" oninput="whatIfCalc()" onfocus="rawInput(this)" onblur="fmtInput(this);whatIfCalc()"></div>
-    <p id="wio_out" class="capd">Pick a goal and a weekly amount.</p>
+    <div class="field" style="margin-bottom:9px"><label>How often?</label><div class="seg" id="wio_per" style="display:flex;width:100%"><button class="on" data-per="week" onclick="periodPick(this)" style="flex:1">Per week</button><button data-per="month" onclick="periodPick(this)" style="flex:1">Per month</button></div></div>
+    <div class="field" style="margin-bottom:9px"><label>If I save this much</label><input id="wio_week" type="text" inputmode="decimal" placeholder="Amount ($)" oninput="whatIfCalc()" onfocus="rawInput(this)" onblur="fmtInput(this);whatIfCalc()" onkeydown="if(event.key==='Tab'||event.key==='Enter'){event.preventDefault();this.blur();}"></div>
+    <p id="wio_out" class="capd">Pick a goal and an amount.</p>
   </div>`;
 }
 function whatIfCalc(){
   const out=$("#wio_out"); if(!out)return;
-  const scope=$("#wio_scope")?$("#wio_scope").value:"__all__", wk=numVal($("#wio_week"));
+  const scope=$("#wio_scope")?$("#wio_scope").value:"__all__", amt=numVal($("#wio_week"));
+  const perBtn=document.querySelector('#wio_per .on'), per=perBtn?perBtn.dataset.per:'week';
   let left,name;
   if(scope==="__all__"){ const gs=state.goals.map(computeGoal); left=gs.reduce((a,c)=>a+c.left,0); name="all your goals"; }
   else { const g=goalById(scope); if(!g){out.textContent="";return;} const c=computeGoal(g); left=c.left; name=capFirst(c.gname); }
-  if(!wk||wk<=0){out.textContent="Pick a goal and a weekly amount.";return;}
+  if(!amt||amt<=0){out.textContent="Pick a goal and an amount.";return;}
   if(left<=0){out.textContent=name+" is already funded. Go you.";return;}
-  const weeks=Math.ceil(left/wk), d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+weeks*7);
-  out.textContent=`Saving ${money(wk)}/week, you'll fund ${name} around ${d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})} (${weeks} weeks).`;
+  const d=new Date(); d.setHours(0,0,0,0); const dstr=()=>d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+  if(per==="month"){ const months=Math.ceil(left/amt); d.setMonth(d.getMonth()+months); out.textContent=`Saving ${money(amt)}/month, you'll fund ${name} around ${dstr()} (${months} month${months===1?'':'s'}).`; }
+  else { const weeks=Math.ceil(left/amt); d.setDate(d.getDate()+weeks*7); out.textContent=`Saving ${money(amt)}/week, you'll fund ${name} around ${dstr()} (${weeks} week${weeks===1?'':'s'}).`; }
 }
+function periodPick(b){ const p=b.parentElement; p.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); whatIfCalc(); }
 function moveToPlus(){
   const payload={schemaVersion:STASH_SCHEMA,profile:state.profile,voice:state.voice,goals:state.goals};
   const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
@@ -1203,12 +1212,13 @@ function render(){
   else if(view==="settings") body=vSettings();
   else body=state.goals.length>1?vOverview():vGoal();
   const mobile=window.innerWidth<=860;
-  root.innerHTML=`<div class="app"><aside class="side"><div class="brand">Stash</div>
+  root.innerHTML=`<div class="app"><aside class="side"><div class="sideinner"><div class="brand">Stash</div>
     <div style="font-size:11px;opacity:.6;letter-spacing:1px;text-transform:uppercase">Holls Finds Digital</div>
     <nav class="nav">${navBtn("home","◎","Home")}${navBtn("goals","⚑","Goals")}${navBtn("activity","≣","Activity")}${navBtn("settings","⚙","Settings")}</nav>
     ${(!mobile&&state.goals.length)?`<div class="sideadd"><div class="cardhd" style="font-size:15px;margin-bottom:10px">Track Deposit</div>${addUnified()}</div>`:""}
+    <button class="plusbtn" style="background:transparent;border:1px solid rgba(255,255,255,.22);color:#f0e9e2;margin-top:14px" onclick="goBackup()">⬇ Back Up</button>
     <button class="plusbtn" onclick="go('settings')">✦ Stash Plus</button>
-    <div class="foot">Your data stays on this device.<br>Back it up in Settings.</div></aside>
+    <div class="foot">Your data stays on this device.<br>Back it up anytime above.</div></div></aside>
     <main class="main">${body}</main></div>`;
 }
 
